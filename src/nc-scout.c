@@ -65,13 +65,13 @@ int main (int argc, char *argv[])
 {   
     struct Builtin 
     {   
-        char *name;
+        const char *name;
         int (*execute)(int argc); // Pointer to the function that executes a builtin.
     };
 
     struct Subcommand 
     {   
-        char *name;
+        const char *name;
         int (*execute)(int argc, char *argv[]); // Pointer to the function that executes a subcommand.
     };
    
@@ -79,10 +79,8 @@ int main (int argc, char *argv[])
     {
         {"--help", builtin_exec_help},
         {"-h", builtin_exec_help},
-        {"help", builtin_exec_help},
         {"--version", builtin_exec_version},
         {"-v", builtin_exec_version},
-        {"version", builtin_exec_version}
     };
 
     struct Subcommand Subcommands[] = 
@@ -90,9 +88,12 @@ int main (int argc, char *argv[])
         {"search", subc_exec_search}
     };
 
+    // Get the number of Builtins and Subcommands.
     int n_builtins = sizeof(Builtins) / sizeof(Builtins[0]);
     int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
 
+    // Iterate through Builtins and Subcommands, looking for names that match argv[1].
+    // Search through Builtins first, then Subcommands. Execute the first match that is found.
     for (int i = 0; i < n_builtins; i++)
     {
         if (strcmp(argv[1], Builtins[i].name) == 0) {

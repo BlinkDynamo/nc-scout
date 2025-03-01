@@ -52,6 +52,9 @@ bool matches_flag   = false;
 bool strict_flag    = false;
 bool recursive_flag = false;
 
+// Option counter.
+int options = 0;
+
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
 {
@@ -179,8 +182,15 @@ int subc_exec_search (int argc, char *argv[])
                 return EXIT_FAILURE;
 
             case 'h':
-                printf(HELP_SEARCH);
-                return EXIT_SUCCESS;
+                // Make sure that there are no arguments supplied.
+                if (argc == 2) {
+                    printf("%s", HELP_SEARCH);
+                    return EXIT_SUCCESS;
+                }
+                else {
+                    printf("Incorrect usage.\nDo `nc-scout search --help` for more information about usage.\n");
+                    return EXIT_FAILURE;
+                }
 
             case 'f':
                 full_path_flag = true;
