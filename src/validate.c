@@ -36,7 +36,7 @@
 bool validate_target_dirname_exists (const char *target_dirname)
 {
     if (access(target_dirname, F_OK) != 0) {
-        fprintf(stderr, "Error: Directory '%s' does not exist.\n", target_dirname);
+        printf("Error: Directory '%s' does not exist.\n", target_dirname);
         return false;
     }
     return true;

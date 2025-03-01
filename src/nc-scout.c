@@ -63,6 +63,12 @@ int builtin_exec_version (int argc)
 
 int main (int argc, char *argv[]) 
 {   
+    // Check for no supplied arguments (ie: just `nc-scout`).
+    if (argc < 2) {
+        printf("No arguments supplied.\nDo `nc-scout --help` for usage information.\n");
+        return EXIT_FAILURE;
+    }
+
     struct Builtin 
     {   
         const char *name;
