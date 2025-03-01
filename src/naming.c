@@ -107,14 +107,16 @@ bool naming_set_expression (const char *arg_naming_convention, char **ptr_search
 {
     for (int i = 0; i < n_members_in_Conventions; i++) {
         if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
-            if (strict_flag == true)
+            if (strict_flag == true) {
                 *ptr_search_expression = Conventions[i].expr_strict;
-            else
+            }
+            else {
                 *ptr_search_expression = Conventions[i].expr_lenient;
+            }
             return true;
         }
     }
-    fprintf(stderr, "Error: '%s' is not a valid naming convention\n", arg_naming_convention);
+    printf("Error: '%s' is not a valid naming convention\n", arg_naming_convention);
     return false;
 }
 
@@ -122,7 +124,7 @@ bool naming_set_expression (const char *arg_naming_convention, char **ptr_search
 bool naming_compile_regex (regex_t *regex, char *expression)
 {
     if (regcomp(regex, expression, REG_EXTENDED) != 0) {
-        fprintf(stderr, "Error: Failed to compile regex.\n");
+        printf("Error: Failed to compile regex.\n");
         return false; 
     }
     return true;
@@ -134,8 +136,8 @@ bool naming_match_regex (regex_t regex, const char *filename)
     int regex_return;
     regex_return = regexec(&regex, filename, 0, NULL, 0);
     
-    if (regex_return == 0)
+    if (regex_return == 0) {
         return true;
-    else
-        return false;
+    }
+    return false;
 }
