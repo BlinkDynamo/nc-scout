@@ -14,7 +14,7 @@ SRC_DIR = src
 BIN_DIR = $(PREFIX)/bin
 
 # Important files.
-SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c	
+SRCS = src/main.c src/validate.c src/naming.c src/search.c	
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 EXEC = build/nc-scout
 TESTS_EXEC_BUILD = tests/build.sh
