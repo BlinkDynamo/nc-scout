@@ -213,12 +213,11 @@ int subc_exec_search (int argc, char *argv[])
     }
     
     int non_option_argc = argc - optind;
-    if (non_option_argc != N_REQUIRED_ARGS) {
-        printf("Error: Incorrect number of arguments (%d). ", non_option_argc);
-        printf("Expecting %d arguments: [CONVENTION] [DIRECTORY]\n", N_REQUIRED_ARGS);
-        printf("Usage: nc-scout search <OPTIONS> [CONVENTION] [DIRECTORY].\n");
+    if (non_option_argc < N_REQUIRED_ARGS) {
+        printf("Insufficient arguments.\nDo `nc-scout search --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
+
     const char *arg_naming_convention = argv[optind];
     const char *arg_target_dirname = argv[optind + 1]; 
 
@@ -227,8 +226,8 @@ int subc_exec_search (int argc, char *argv[])
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;
 
-    if ((validate_target_dirname_exists(arg_target_dirname)) &&
-        (naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
+    if ((naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
+        (validate_target_dirname_exists(arg_target_dirname)) && 
         (naming_compile_regex(&search_regex, search_expression)))
     {     
         search_directory(arg_target_dirname, search_regex); 
