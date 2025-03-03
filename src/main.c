@@ -95,8 +95,8 @@ int main (int argc, char *argv[])
     };
 
     // Get the number of Builtins and Subcommands.
-    int n_builtins = sizeof(Builtins) / sizeof(Builtins[0]);
-    int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
+    const int n_builtins = sizeof(Builtins) / sizeof(Builtins[0]);
+    const int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
 
     // Iterate through Builtins and Subcommands, looking for names that match argv[1].
     // Search through Builtins first, then Subcommands. Execute the first match that is found.
