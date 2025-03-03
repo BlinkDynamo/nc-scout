@@ -27,7 +27,9 @@
 *
 *********************************************************************************************/
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif // _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,9 +53,6 @@ bool full_path_flag = false;
 bool matches_flag   = false;
 bool strict_flag    = false;
 bool recursive_flag = false;
-
-// Option counter.
-int options = 0;
 
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
@@ -224,7 +223,7 @@ int subc_exec_search (int argc, char *argv[])
     const char *arg_target_dirname = argv[optind + 1]; 
 
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
-    char *search_expression;
+    const char *search_expression;
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;
 

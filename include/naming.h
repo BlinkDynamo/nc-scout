@@ -34,14 +34,14 @@
 #include <regex.h>
 
 struct Convention {
-    char *name;
-    char *expr_strict;
-    char *expr_lenient;
+    const char *name;
+    const char *expr_strict;
+    const char *expr_lenient;
 };
 
-bool naming_set_expression (const char *arg_naming_convention, char **ptr_search_expression, bool strict_flag);
+bool naming_set_expression (const char *arg_naming_convention, const char **ptr_search_expression, bool strict_flag);
 
-bool naming_compile_regex (regex_t *regex, char *search_expression);
+bool naming_compile_regex (regex_t *regex, const char *search_expression);
 
 bool naming_match_regex (regex_t regex, const char *filename);
 
