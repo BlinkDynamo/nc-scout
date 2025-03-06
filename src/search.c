@@ -54,6 +54,8 @@ bool matches_flag   = false;
 bool strict_flag    = false;
 bool recursive_flag = false;
 
+const char *abs_initial_search_path = NULL;
+
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
 {
@@ -67,7 +69,7 @@ const char *get_relative_path (const char *abs_initial_path, const char *abs_cur
 
 // Compares a d_name to a regular expression. Will print matches or non-matches depending on matches_flag.
 void process_current_file (struct dirent *dp, char abs_current_file_path[PATH_MAX],
-                           char *abs_initial_search_path, regex_t regex)
+                           const char *abs_initial_search_path, regex_t regex)
 {
     // Matches:
     if (matches_flag == true) {
@@ -103,10 +105,8 @@ void search_directory (const char *search_path, regex_t regex)
     const char *abs_search_path = canonicalize_file_name(search_path);
     
     // If this is the first time search_directory has been called, save the absolute initial search path.
-    // Append a "/" to the end of abs_initial_search_path to allow get_relative_path to properly find the difference.
-    static char *abs_initial_search_path = NULL;
     if (abs_initial_search_path == NULL) {
-        asprintf(&abs_initial_search_path, "%s/", abs_search_path);
+        abs_initial_search_path = abs_search_path;
     }
 
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
@@ -128,7 +128,6 @@ void search_directory (const char *search_path, regex_t regex)
         // 'abs_current_file_path' is a concatenation of abs_search_path and dp->d_name.
         char abs_current_file_path[PATH_MAX];
         snprintf(abs_current_file_path, sizeof(abs_current_file_path), "%s/%s", abs_search_path, dp->d_name);
-
         // Determine file type and perform actions accordingly.
         struct stat statbuf;
         if (lstat(abs_current_file_path, &statbuf) != 0) {
