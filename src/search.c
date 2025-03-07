@@ -38,7 +38,6 @@
 #include <getopt.h>
 #include <unistd.h>
 #include <errno.h>
-#include <sys/stat.h>
 #include <linux/limits.h>
 
 #include "help.h"
@@ -64,43 +63,63 @@ const char *get_relative_path (const char *abs_initial_path, const char *abs_cur
         abs_initial_path++;
         abs_current_path++;
     }
-    return abs_current_path;
+    // If abs_current_path starts with a '/', start the string one after that, otherwise return it unchanged.
+    return (*abs_current_path == '/') ? abs_current_path + 1 : abs_current_path;
 }
 
-// Compares a d_name to a regular expression. Will print matches or non-matches depending on matches_flag.
-void process_current_file (struct dirent *dp, char abs_current_file_path[PATH_MAX],
+void process_current_file (struct dirent *current_file, const char *abs_search_path,
                            const char *abs_initial_search_path, regex_t regex)
+/**********************************************************************************************
+*
+*   Compares a d_name to a regular expression. Will print matches or non-matches depending on 
+*   matches_flag.
+*
+*   ---------------------------------------- ARGUMENTS ----------------------------------------
+*
+*   current_file                The pointer to the current file being processed.
+*
+*   abs_search_path             The absolute path of the dir current_file is searching in.
+*
+*   abs_initial_search_path     The absolute path to the dir where search was first called.
+*
+*   regex                       The compiled regex of the convention being searched for.
+*
+**********************************************************************************************/
 {
-    // Matches:
-    if (matches_flag == true) {
-        if (naming_match_regex(regex, dp->d_name)) { 
-            // Matches with full path. 
-            if (full_path_flag == true) {
-                printf("%s\n", abs_current_file_path);
+    bool should_print = (matches_flag && naming_match_regex(regex, current_file->d_name)) ||
+                        (!matches_flag && !naming_match_regex(regex, current_file->d_name));
+
+    if (should_print)
+    {
+        if (full_path_flag)
+            {
+                printf("%s/%s\n", abs_search_path, current_file->d_name);
             }
-            // Matches with relative path.
-            else if (full_path_flag == false) {
-                printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
-            }
-        }
-    }
-    // Non-matches:
-    else {
-        if (!naming_match_regex(regex, dp->d_name)) {
-            // Non-matches with full path. 
-            if (full_path_flag == true) {
-                printf("%s\n", abs_current_file_path);
-            }
-            // Non-matches with relative path.
-            else if (full_path_flag == false) {
-                printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
-            }
+        else
+        {
+        // If relative_path is empty (current directory), insert a forward-slash between
+        // relative_path and current_file->d_name.
+        const char *relative_path = get_relative_path(abs_initial_search_path, abs_search_path);
+        printf("%s%s%s\n",
+               relative_path,
+               (strlen(relative_path) > 0) ? "/" : "",
+               current_file->d_name);
         }
     }
 }
 
-// Search a const char *search_path for matches to a regex_t regex.
 void search_directory (const char *search_path, regex_t regex)
+/**********************************************************************************************
+*
+*   Searches a directory for filenames that match a regular expression.
+*
+*   ---------------------------------------- ARGUMENTS ----------------------------------------
+*
+*   search_path     The directory where the search will take place.
+*
+*   regex           The compiled regex of the convention being searched for.
+*
+**********************************************************************************************/
 {
     const char *abs_search_path = canonicalize_file_name(search_path);
     
@@ -112,52 +131,63 @@ void search_directory (const char *search_path, regex_t regex)
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
     DIR *current_dir = opendir(abs_search_path);
     if (current_dir == NULL) {
-        printf("Error: cannot access %s due to Error %d (%s).\n", abs_search_path, errno, strerror(errno));
+        printf("Error: cannot access %s due to Error %d (%s).\n", abs_search_path, errno, 
+                strerror(errno));
         return;
     }
    
-    // Begin reading directories/files inside current_dir...
-    struct dirent *dp;
-    while ((dp = readdir(current_dir)) != NULL)
+    // Begin reading directories/files inside current_dir.
+    struct dirent *current_file;
+    while ((current_file = readdir(current_dir)) != NULL)
     {
         // Skip current and parent entries.
-        if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0) {
+        if (strcmp(current_file->d_name, ".") == 0 || strcmp(current_file->d_name, "..") == 0) {
             continue;
         }
 
-        // 'abs_current_file_path' is a concatenation of abs_search_path and dp->d_name.
-        char abs_current_file_path[PATH_MAX];
-        snprintf(abs_current_file_path, sizeof(abs_current_file_path), "%s/%s", abs_search_path, dp->d_name);
-        // Determine file type and perform actions accordingly.
-        struct stat statbuf;
-        if (lstat(abs_current_file_path, &statbuf) != 0) {
-            printf("Error: lstat failed due to Error %d (%s).\n", errno, strerror(errno));
-            return;
-        }
-
         // If the current file is a directory...
-        if (S_ISDIR(statbuf.st_mode)) {
-            process_current_file(dp, abs_current_file_path, abs_initial_search_path, regex);
-            // Recurse each subdirectory if --recursive is set.
+        if (current_file->d_type == DT_DIR) {
+
+            // Process it.
+            process_current_file(current_file, abs_search_path, abs_initial_search_path, regex);
+
+            // Then if recursive_flag is true, concatenate abs_search_path with current_file->d_name
+            // and call search_directory at that location.
             if (recursive_flag == true) {
-                search_directory(abs_current_file_path, regex);
+                const char abs_new_search_path[PATH_MAX];
+                snprintf(abs_new_search_path, sizeof(abs_new_search_path), "%s/%s", abs_search_path, 
+                         current_file->d_name);
+                search_directory(abs_new_search_path, regex);
             }
         }
         // Else if the current file is a regular file...
-        else if (S_ISREG(statbuf.st_mode)) { 
-            process_current_file(dp, abs_current_file_path, abs_initial_search_path, regex);
+        else if (current_file->d_type == DT_REG) { 
+
+            // Process it.
+            process_current_file(current_file, abs_search_path, abs_initial_search_path, regex);
         }
     }
     closedir(current_dir);
 }
 
-// The subcommand entry function called from src/nc-scout.c. argc and argv have "nc-scout" stripped.
 int subc_exec_search (int argc, char *argv[])
-{ 
+/**********************************************************************************************
+*
+*   The external function called from src/main.c. Processes options, compiles the regex, does
+*   validation, and finally calls search_directory.
+*
+*   ---------------------------------------- ARGUMENTS ----------------------------------------
+*
+*   argc    The argc of main() in src/main.c with 1 removed.
+*
+*   argv    The argv of main() in src/main.c with "nc-scout" removed from the beginning.
+*
+**********************************************************************************************/
+{
     int current_opt;
     while (1)
     {
-        static struct option long_options_search[] = 
+        static struct option long_options_search[] =
         {
             {"help", no_argument, 0, 'h'},
             {"full-path", no_argument, 0, 'f'}, 
@@ -210,7 +240,7 @@ int subc_exec_search (int argc, char *argv[])
                 abort();
         }
     }
-    
+
     int non_option_argc = argc - optind;
     if (non_option_argc < N_REQUIRED_ARGS) {
         printf("Insufficient arguments.\nDo `nc-scout search --help` for more information about usage.\n");
