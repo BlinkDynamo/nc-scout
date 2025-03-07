@@ -97,15 +97,36 @@ struct Convention Conventions[] = {
 
 const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(struct Convention));
 
-// Attempts to match arg_naming_convention against every Conventions[i].name in Conventions[].
-// If a match is found, dereference the pointer ptr_search_expression points to, set it to
-// Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
-// to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
-// search_expression NULL.
 bool naming_set_expression (const char *arg_naming_convention, const char **ptr_search_expression, 
                             bool strict_flag)
+/**********************************************************************************************
+*
+*   Attempts to match arg_naming_convention against every Conventions[i].name in Conventions[].
+*   If a match is found, dereference the pointer ptr_search_expression points to, set it to
+*   Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
+*   to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
+*   search_expression NULL.
+*
+*   ---------------------------------------- ARGUMENTS ----------------------------------------
+*
+*   arg_naming_convention   The naming convention already verified to exist in Conventions[].
+*
+*   ptr_search_expression   Pointer to an unset search expression. Sets it to the expression
+*                           naming convention arg_naming_convention matches in Conventions[].
+*                           If arg_naming_convention matches nothing in Conventions[], it 
+*                           remains NULL.
+*
+*   strict_flag             Determines whether ptr_search_expression will be set to a leninent
+*                           or strict version of arg_naming_convention.
+*
+*   ----------------------------------------- RETURNS -----------------------------------------
+*
+*   True if ptr_search_expression was set, false if not.
+*
+**********************************************************************************************/
 {
-    for (int i = 0; i < n_members_in_Conventions; i++) {
+    for (int i = 0; i < n_members_in_Conventions; i++) 
+    {
         if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
             if (strict_flag == true) {
                 *ptr_search_expression = Conventions[i].expr_strict;

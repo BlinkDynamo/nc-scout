@@ -181,6 +181,10 @@ int subc_exec_search (int argc, char *argv[])
 *
 *   argv    The argv of main() in src/main.c with "nc-scout" removed from the beginning.
 *
+*   ----------------------------------------- RETURNS -----------------------------------------
+*
+*   It inherrits the return of main() in src/main.c, returning EXIT_FAILURE or EXIT_SUCCESS.
+*
 **********************************************************************************************/
 {
     int current_opt;

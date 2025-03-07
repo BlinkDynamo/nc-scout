@@ -62,6 +62,23 @@ int builtin_exec_version (int argc)
 }
 
 int main (int argc, char *argv[]) 
+/**********************************************************************************************
+*
+*   The entry point of nc-scout.
+*
+*   ---------------------------------------- ARGUMENTS ----------------------------------------
+*
+*   argc    The number of supplied argument strings.
+*
+*   argv    The array of argument strings.
+*
+*   ----------------------------------------- RETURNS -----------------------------------------
+*
+*   An exec function, either builtin or subcommand, or EXIT_FAILURE/EXIT_SUCCESS if the program
+*   cannot successfully reach returning one of these. If it does successfully return an exec
+*   function, that function inherrits the responsibility of returning EXIT_FAILURE/EXIT_SUCCESS.
+*
+**********************************************************************************************/
 {   
     // Check for no supplied arguments (ie: just `nc-scout`).
     if (argc < 2) {
