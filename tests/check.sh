@@ -22,6 +22,7 @@ RESET="\033[0m"
 tests_passed=0
 tests_executed=0
 
+# Compares the lines of output of test_command to n_expected_correct.
 function check_search()
 {
     (( tests_executed++ ))
