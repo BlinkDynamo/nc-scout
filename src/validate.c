@@ -34,19 +34,24 @@
 
 #include "validate.h"
 
-bool validate_target_directory (const char *target_directory)
+bool validate_file_exists (const char *filepath)
 {
-    // Check if the target_directory doesn't exist.
-    if (access(target_directory, F_OK) != 0) {
-        printf("Error: Directory '%s' does not exist.\n", target_directory);
-        return false;
-    }
-    // Then check if the target_directory is not a directory.
-    struct stat target_directory_stat;
-    stat(target_directory, &target_directory_stat);
-    if (!S_ISDIR(target_directory_stat.st_mode)) {
-        printf("Error: '%s' is not a directory.\n", target_directory);
+    // Check if the file doesn't exist.
+    if (access(filepath, F_OK) != 0) {
+        printf("Error: '%s' does not exist.\n", filepath);
         return false;
     }    
+    return true;
+}
+
+bool validate_file_is_dir (const char *filepath)
+{
+    // Check if the file is a directory.
+    struct stat filepath_stat;
+    stat(filepath, &filepath_stat);
+    if (!S_ISDIR(filepath_stat.st_mode)) {
+        printf("Error: '%s' is not a directory.\n", filepath);
+        return false;
+    }
     return true;
 }

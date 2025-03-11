@@ -153,7 +153,7 @@ void search_directory (const char *search_path, regex_t regex)
             // Then if recursive_flag is true, concatenate abs_search_path with current_file->d_name
             // and call search_directory at that location.
             if (recursive_flag == true) {
-                const char abs_new_search_path[PATH_MAX];
+                char abs_new_search_path[PATH_MAX];
                 snprintf(abs_new_search_path, sizeof(abs_new_search_path), "%s/%s", abs_search_path, 
                          current_file->d_name);
                 search_directory(abs_new_search_path, regex);
@@ -259,7 +259,8 @@ int subc_exec_search (int argc, char *argv[])
     regex_t search_regex;
 
     if ((naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
-        (validate_target_directory(arg_target_dirname)) && 
+        (validate_file_exists(arg_target_dirname)) && 
+        (validate_file_is_dir(arg_target_dirname)) && 
         (naming_compile_regex(&search_regex, search_expression)))
     {     
         search_directory(arg_target_dirname, search_regex); 
