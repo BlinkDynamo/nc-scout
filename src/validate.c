@@ -28,16 +28,25 @@
 *********************************************************************************************/
 
 #include <stdio.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 #include "validate.h"
 
-bool validate_target_dirname_exists (const char *target_dirname)
+bool validate_target_directory (const char *target_directory)
 {
-    if (access(target_dirname, F_OK) != 0) {
-        printf("Error: Directory '%s' does not exist.\n", target_dirname);
+    // Check if the target_directory doesn't exist.
+    if (access(target_directory, F_OK) != 0) {
+        printf("Error: Directory '%s' does not exist.\n", target_directory);
         return false;
     }
+    // Then check if the target_directory is not a directory.
+    struct stat target_directory_stat;
+    stat(target_directory, &target_directory_stat);
+    if (!S_ISDIR(target_directory_stat.st_mode)) {
+        printf("Error: '%s' is not a directory.\n", target_directory);
+        return false;
+    }    
     return true;
 }

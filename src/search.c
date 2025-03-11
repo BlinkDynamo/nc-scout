@@ -259,7 +259,7 @@ int subc_exec_search (int argc, char *argv[])
     regex_t search_regex;
 
     if ((naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
-        (validate_target_dirname_exists(arg_target_dirname)) && 
+        (validate_target_directory(arg_target_dirname)) && 
         (naming_compile_regex(&search_regex, search_expression)))
     {     
         search_directory(arg_target_dirname, search_regex); 
