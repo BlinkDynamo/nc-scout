@@ -35,7 +35,7 @@
 #include "version.h"
 #include "help.h"
 
-int builtin_exec_help (int argc)
+static int builtin_exec_help (int argc)
 {
     // Input must be either nc-scout -h or nc-scout --help exactly.
     if (argc == 2) {
@@ -48,7 +48,7 @@ int builtin_exec_help (int argc)
     }
 }
 
-int builtin_exec_version (int argc)
+static int builtin_exec_version (int argc)
 {   
     // Input must be either nc-scout -v or nc-scout --version exactly.
     if (argc == 2) {

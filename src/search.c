@@ -47,15 +47,15 @@
 #define N_REQUIRED_ARGS 2
 
 // Flags.
-bool full_path_flag = false;
-bool matches_flag   = false;
-bool strict_flag    = false;
-bool recursive_flag = false;
+static bool full_path_flag = false;
+static bool matches_flag   = false;
+static bool strict_flag    = false;
+static bool recursive_flag = false;
 
-const char *abs_initial_search_path = NULL;
+static const char *abs_initial_search_path = NULL;
 
 // Returns the difference of an absolute initial path and an absolute current path.
-const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
+static const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
 {
     while (*abs_initial_path && *abs_current_path && *abs_initial_path == *abs_current_path)
     {
@@ -66,7 +66,7 @@ const char *get_relative_path (const char *abs_initial_path, const char *abs_cur
     return (*abs_current_path == '/') ? abs_current_path + 1 : abs_current_path;
 }
 
-void process_current_file (struct dirent *current_file, const char *abs_search_path,
+static void process_current_file (struct dirent *current_file, const char *abs_search_path,
                            const char *abs_initial_search_path, regex_t regex)
 /**********************************************************************************************
 *
@@ -107,7 +107,7 @@ void process_current_file (struct dirent *current_file, const char *abs_search_p
     }
 }
 
-void search_directory (const char *search_path, regex_t regex)
+static void search_directory (const char *search_path, regex_t regex)
 /**********************************************************************************************
 *
 *   Searches a directory for filenames that match a regular expression.
