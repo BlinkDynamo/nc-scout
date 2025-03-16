@@ -1,8 +1,8 @@
 /**********************************************************************************************
 *
-*   analyze - nc-scout analyze handling, operation, and output. 
+*   common - Contains general functions that are commonly used throughout the project.
 *
-*   LICENSE: zlib/libpng 
+*   LICENSE: zlib/libpng
 *
 *   Copyright (c) 2024-2025 Josh Hayden (@BlinkDynamo)
 *
@@ -23,7 +23,7 @@
 *   misrepresented as being the original software.
 *
 *   3. This notice may not be removed or altered from any source
-*   distribution. 
+*   distribution.
 *
 *********************************************************************************************/
 

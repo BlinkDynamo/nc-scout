@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   search - Handles options, validation, and runtime of the nc-scout search subcommand.
+*   common - Contains general functions that are commonly used throughout the project.
 *
 *   LICENSE: zlib/libpng
 *
@@ -26,6 +26,7 @@
 *   distribution.
 *
 *********************************************************************************************/
+
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
 {
