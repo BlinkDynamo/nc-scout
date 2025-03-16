@@ -14,7 +14,7 @@ SRC_DIR = src
 BIN_DIR = $(PREFIX)/bin
 
 # Important files.
-SRCS = src/main.c src/validate.c src/naming.c src/search.c	
+SRCS = src/main.c src/validate.c src/naming.c src/search.c src/analyze.c src/common.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 EXEC = $(BUILD_DIR)/nc-scout
 TESTS_EXEC_BUILD = tests/build.sh
@@ -27,6 +27,8 @@ export TESTS_DIR := $(TESTS_DIR)
 #----------------------------------------------------------------------------------------------#
 # Dependency Tree 
 #----------------------------------------------------------------------------------------------#
+.PHONY: all check install uninstall clean
+
 all: $(BUILD_DIR) $(EXEC)
 
 check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)

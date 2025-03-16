@@ -31,9 +31,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "search.h"
 #include "version.h"
 #include "help.h"
+#include "search.h"
+#include "analyze.h"
 
 static int builtin_exec_help (int argc)
 {
@@ -108,7 +109,8 @@ int main (int argc, char *argv[])
 
     struct Subcommand Subcommands[] = 
     {
-        {"search", subc_exec_search}
+        {"search", subc_exec_search},
+        {"analyze", subc_exec_analyze}
     };
 
     // Get the number of Builtins and Subcommands.
