@@ -38,3 +38,8 @@ const char *get_relative_path (const char *abs_initial_path, const char *abs_cur
     // If abs_current_path starts with a '/', start the string one after that, otherwise return it unchanged.
     return (*abs_current_path == '/') ? abs_current_path + 1 : abs_current_path;
 }
+
+// Returns a float of num_a / num_b, unless num_b is 0, in which case it returns 0.0.
+double percentage(int num_a, int num_b) {
+    return (num_b) == 0 ? 0.0 : (num_a * 100.0) / (num_b); 
+}

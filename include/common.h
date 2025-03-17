@@ -32,4 +32,6 @@
 
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path);
 
+double percentage(int num_a, int num_b);
+
 #endif // COMMON_H

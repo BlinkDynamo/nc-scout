@@ -48,59 +48,18 @@
 #define N_REQUIRED_ARGS 2
 
 // Flags.
-static bool full_path_flag = false;
-static bool matches_flag   = false;
 static bool strict_flag    = false;
 static bool recursive_flag = false;
 
-static const char *abs_initial_analyze_path = NULL;
-
-static void process_current_file (struct dirent *current_file, const char *abs_analyze_path,
-                           const char *abs_initial_analyze_path, regex_t regex)
-/**********************************************************************************************
-*
-*   Compares a d_name to a regular expression. Will print matches or non-matches depending on 
-*   matches_flag.
-*
-*   ---------------------------------------- ARGUMENTS ----------------------------------------
-*
-*   current_file                The pointer to the current file being processed.
-*
-*   abs_analyze_path             The absolute path of the dir current_file is analyzeing in.
-*
-*   abs_initial_analyze_path     The absolute path to the dir where analyze was first called.
-*
-*   regex                       The compiled regex of the convention being analyzeed for.
-*
-**********************************************************************************************/
-{
-    bool should_print = (matches_flag && naming_match_regex(regex, current_file->d_name)) ||
-                        (!matches_flag && !naming_match_regex(regex, current_file->d_name));
-
-    if (should_print)
-    {
-        if (full_path_flag)
-            {
-                printf("%s/%s\n", abs_analyze_path, current_file->d_name);
-            }
-        else
-        {
-        // If relative_path is empty (current directory), insert a forward-slash between
-        // relative_path and current_file->d_name.
-        const char *relative_path = get_relative_path(abs_initial_analyze_path, abs_analyze_path);
-        printf("%s%s%s\n",
-               relative_path,
-               (strlen(relative_path) > 0) ? "/" : "",
-               current_file->d_name);
-        }
-    }
-}
+static int matches = 0;
+static int non_matches = 0;
 
 static void analyze_directory (const char *analyze_path, regex_t regex)
 /**********************************************************************************************
 *
-*   Searches a directory for filenames that match a regular expression.
-*
+*   Analyzes a directory given a naming convention, printing the percentages of matching files 
+*   to total files.
+**
 *   ---------------------------------------- ARGUMENTS ----------------------------------------
 *
 *   analyze_path     The directory where the analyze will take place.
@@ -111,11 +70,6 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
 {
     const char *abs_analyze_path = canonicalize_file_name(analyze_path);
     
-    // If this is the first time analyze_directory has been called, save the absolute initial analyze path.
-    if (abs_initial_analyze_path == NULL) {
-        abs_initial_analyze_path = abs_analyze_path;
-    }
-
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
     DIR *current_dir = opendir(abs_analyze_path);
     if (current_dir == NULL) {
@@ -137,7 +91,11 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
         if (current_file->d_type == DT_DIR) {
 
             // Process it.
-            process_current_file(current_file, abs_analyze_path, abs_initial_analyze_path, regex);
+            if (naming_match_regex(regex, current_file->d_name)) {
+                matches++;
+            } else {
+                non_matches++;
+            }
 
             // Then if recursive_flag is true, concatenate abs_analyze_path with current_file->d_name
             // and call analyze_directory at that location.
@@ -152,7 +110,11 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
         else if (current_file->d_type == DT_REG) { 
 
             // Process it.
-            process_current_file(current_file, abs_analyze_path, abs_initial_analyze_path, regex);
+            if (naming_match_regex(regex, current_file->d_name)) {
+                matches++;
+            } else {
+                non_matches++;
+            }
         }
     }
     closedir(current_dir);
@@ -182,8 +144,6 @@ int subc_exec_analyze (int argc, char *argv[])
         static struct option long_options_analyze[] =
         {
             {"help", no_argument, 0, 'h'},
-            {"full-path", no_argument, 0, 'f'}, 
-            {"matches", no_argument, 0, 'm'},
             {"strict", no_argument, 0, 's'},
             {"recursive", no_argument, 0, 'R'},
             {0, 0, 0, 0}
@@ -211,14 +171,6 @@ int subc_exec_analyze (int argc, char *argv[])
                     printf("Incorrect usage.\nDo `nc-scout analyze --help` for more information about usage.\n");
                     return EXIT_FAILURE;
                 }
-
-            case 'f':
-                full_path_flag = true;
-                break;
-
-            case 'm':
-                matches_flag = true;
-                break;
 
             case 's':
                 strict_flag = true;
@@ -253,6 +205,19 @@ int subc_exec_analyze (int argc, char *argv[])
         (naming_compile_regex(&analyze_regex, analyze_expression)))
     {     
         analyze_directory(arg_target_dirname, analyze_regex); 
+        printf("Analyzed the presence of %s %s files and directories in '%s'.\n\n", 
+                (strict_flag) ? "strictly" : "leniently",
+                arg_naming_convention,
+                arg_target_dirname);
+
+        printf("%s:         %d\n", arg_naming_convention, matches);
+        printf("non-%s:     %d\n\n", arg_naming_convention, non_matches);
+        printf("%s %s files and directories make up %0.3f%% of '%s'.\n", 
+                (strict_flag) ? "strictly" : "leniently",
+                arg_naming_convention, 
+                percentage(matches, matches + non_matches), 
+                arg_target_dirname);
+
         return EXIT_SUCCESS;
     }
     return EXIT_FAILURE;
