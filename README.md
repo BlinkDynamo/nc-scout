@@ -8,7 +8,7 @@
 * [Installation](#installation)
 
 ## Description
-nc-scout is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/naming.c), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
+nc-scout is a simple naming convention checker tool. It is intended to help you enforce naming conventions on directory structures. 
 
 ## Dependencies
 * make
@@ -20,31 +20,24 @@ The layout of a nc-scout command.
 nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 
 ### Options
-| Flag              | Description                                                              |
-|-------------------|--------------------------------------------------------------------------|
-| `-v, --version`   | Show what version of the program you are using.                          |
-| `-h, --help`      | Show a helpful message.                                                  |
-| `-f, --full-path` | Display the full path of matching files instead of relative paths.       |
-| `-m, --matches`   | Print matches instead of non-matches.                                    |
-| `-s, --strict`    | Search for the naming convention strictly.                               |
-| `-R, --recursive` | Recursively search through subdirectories.                               |
+Options are command specific. To learn about the specific options available for a command, use `nc-scout [COMMAND] --help`
 
 ### Commands
-|Command   | Description                                                                       |
-|----------|-----------------------------------------------------------------------------------| 
-| `search` | Search a directory for files that do not match a naming convention.               |
-
+|Command            | Description                                                                      |
+|-------------------|----------------------------------------------------------------------------------|
+| `search`          | Search a directory for files that do not match a naming convention.              |
+| `analyze`         | Displays the percentage of files that follow a naming convention in a directory. |
 
 ### Conventions
-| Convention        | Example                                                                  |
-|-------------------|--------------------------------------------------------------------------|
-| `camelcase`       | exampleFileName.txt                                                      |
-| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                                    |
-| `constantcase`    | EXAMPLE_FILE_NAME.txt                                                    |
-| `flatcase`        | examplefilename.txt                                                      |
-| `kebabcase`       | example-file-name.txt                                                    |
-| `pascalcase`      | ExampleFileName.txt                                                      |
-| `snakecase`       | example_file_name.txt                                                    |
+| Convention        | Example                                                                          |
+|-------------------|----------------------------------------------------------------------------------|
+| `camelcase`       | exampleFileName.txt                                                              |
+| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                                            |
+| `constantcase`    | EXAMPLE_FILE_NAME.txt                                                            |
+| `flatcase`        | examplefilename.txt                                                              |
+| `kebabcase`       | example-file-name.txt                                                            |
+| `pascalcase`      | ExampleFileName.txt                                                              |
+| `snakecase`       | example_file_name.txt                                                            |
 
 ### What is the Filename Body of a Filename?
 The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions. The final period itself and the text that follows it is what is defined as the file extention. `search` is only performed on the filename body of a filename.
@@ -111,7 +104,7 @@ cd build/
 To install the binary and use it systemwide:
 ```bash
 sudo make install
-# called from /usr/local/bin/
+# now installed in /usr/local/bin/
 nc-scout --help
 ```
 
@@ -123,4 +116,5 @@ make clean
 To uninstall the binary:
 ```bash
 sudo make uninstall
+# rm -f /usr/local/bin/nc-scout
 ```

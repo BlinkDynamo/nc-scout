@@ -164,7 +164,7 @@ int subc_exec_analyze (int argc, char *argv[])
             case 'h':
                 // Make sure that there are no arguments supplied.
                 if (argc == 2) {
-                    printf("%s", HELP_SEARCH);
+                    printf("%s", HELP_ANALYZE);
                     return EXIT_SUCCESS;
                 }
                 else {
@@ -192,7 +192,7 @@ int subc_exec_analyze (int argc, char *argv[])
     }
 
     const char *arg_naming_convention = argv[optind];
-    const char *arg_target_dirname = argv[optind + 1]; 
+    const char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
 
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     const char *analyze_expression;

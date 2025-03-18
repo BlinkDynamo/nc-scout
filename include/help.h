@@ -42,13 +42,17 @@
 "  -v, --version    Show the version of nc-scout you are using.\n" \
 "\n" \
 "Commands:\n" \
-"  search           Search a directory for files that do not match a naming convention.\n" \
+"  search           Searches a directory for files that do not match a naming convention.\n" \
+"  analyze          Displays the percentage of files that follow a naming convention in a directory.\n" \
+"\n" \
 "\n" \
 ""
 
 // The help message displayed for `nc-scout search --help`, `nc-scout search -h` exactly.
 #define HELP_SEARCH \
 "Usage: nc-scout search <OPTIONS> [CONVENTION] [LOCATION]\n" \
+"\n" \
+"Searches a directory for files and directories that do not match a naming convention.\n" \
 "\n" \
 "<OPTIONS>:\n" \
 "  -h, --help       Show this help message.\n" \
@@ -74,6 +78,52 @@
 "  It should be noted that a search will only be done on contents within a specified location.\n" \
 "  A command such as `nc-scout search -m pascalcase ~/Documents/` would not output 'Documents',\n" \
 "  even though 'Documents' is a pascalcase match.\n" \
+"\n" \
+"Strict vs. Lenient:\n" \
+"  The default enforcement of naming conventions for a search is lenient, although, using\n" \
+"  the -s or --strict option, you can strictly enforce the naming convention for that search.\n" \
+"\n" \
+"  Strict enforcement means that the naming convention MUST be present in it's entirety, while\n" \
+"  lenient enforcement means that the naming convention COULD be present in it's entirety if more\n" \
+"  text is added, but not removed or changed.\n" \
+"\n" \
+"  Example:\n" \
+"    example.txt\n" \
+"\n" \
+"    Matches strictly:\n" \
+"      flatcase - Exactly matches the convention in it's entirety\n" \
+"\n" \
+"    Matches leniently:\n" \
+"      kebabcase - Could be extended to example-file.txt to match the convention in it's entirety\n" \
+"      snakecase - Could be extended to example_file.txt to match the convention in it's entirety\n" \
+"      camelcase - Could be extended to exampleFile.txt to match the convention in it's entirety\n" \
+"\n" \
+""
+
+// The help message displayed for `nc-scout analyze --help`, `nc-scout analyze -h` exactly.
+#define HELP_ANALYZE \
+"Usage: nc-scout analyze <OPTIONS> [CONVENTION] [LOCATION]\n" \
+"\n" \
+"Displays the percentage of files that follow a naming convention in a directory.\n" \
+"\n" \
+"<OPTIONS>:\n" \
+"  -h, --help       Show this help message.\n" \
+"  -s, --strict     Enforce the naming convention strictly.\n" \
+"  -R, --recursive  Analyze all subdirectories recursively.\n" \
+"\n" \
+"[CONVENTION]:\n" \
+"  flatcase         examplefilename.txt\n" \
+"  camelcase        exampleFileName.txt\n" \
+"  pascalcase       ExampleFileName.txt\n" \
+"  snakecase        example_file_name.txt\n" \
+"  constantcase     EXAMPLE_FILE_NAME.txt\n" \
+"  kebabcase        example-file-name.txt\n" \
+"  cobolcase        EXAMPLE-FILE-NAME.txt\n" \
+"\n" \
+"[LOCATION]:\n" \
+"  /var/lib/        Absolute paths to directories.\n" \
+"  ~/Documents/     Variable paths to directories.\n" \
+"  ../Homework/     Relative paths to directories.\n" \
 "\n" \
 "Strict vs. Lenient:\n" \
 "  The default enforcement of naming conventions for a search is lenient, although, using\n" \
