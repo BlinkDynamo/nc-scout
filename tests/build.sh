@@ -10,7 +10,7 @@ if [ -z ${BUILD_DIR} ] && [ -z ${TESTS_DIR} ]; then
     exit 1
 fi
 
-# Sources
+# Source the data file with filename arrays.
 source "tests/data.sh.inc"
 
 #----------------------------------------------------------------------------------------------#
@@ -66,7 +66,7 @@ build_test_directory "cobolcase_strict_matches" 100
 build_test_directory "snakecase_strict_matches" 100
 build_test_directory "constantcase_strict_matches" 100
 
-# Lenient matches
+# Lenient matches.
 build_test_directory "flatcase_lenient_matches" 100
 build_test_directory "camelcase_lenient_matches" 100
 build_test_directory "pascalcase_lenient_matches" 100
