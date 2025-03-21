@@ -10,7 +10,7 @@ if [ -z ${BUILD_DIR} ] && [ -z ${TESTS_DIR} ]; then
     exit 1
 fi
 
-# Source the data file including arrays of test filenames, arranged by test.
+# Sources
 source "tests/data.sh.inc"
 
 #----------------------------------------------------------------------------------------------#
@@ -18,23 +18,37 @@ source "tests/data.sh.inc"
 #----------------------------------------------------------------------------------------------#
 build_test_directory() {
     # The name of test being executed,  as well as the array name of it's needed data in tests/filenames.inc.
-    testname="$1"
+    local testname="$1"
+    # The directory depth of tests to create.
+    local depth="$2"
 
-    mkdir -p "${TESTS_DIR}/${testname}"
+    # The current working directory of the function.
+    local cwd="${TESTS_DIR}/${testname}"
+
+    mkdir -p "${cwd}"
     printf "Built test directory '%s'.\n" "${testname}"
 
-    # Construct the variable name dynamically
+    # Construct the variable name dynamically.
 
-    # Use eval to access the array
+    # Use eval to access the array.
     eval "values=(\"\${${testname}[@]}\")"
     if eval "[[ -z \"\${${testname}[*]}\" ]]" 2>/dev/null; then
         echo "Unable to evaluate $testname to an array."
         return
     fi
 
-    # Iterate over the values
-    for item in "${values[@]}"; do
-        touch "${TESTS_DIR}/${testname}/$item"
+    # For a number of iterations "depth", create values[0] as a directory, values[1] through
+    # values[-1] as files, and cd inside of values[0].
+    for i in $(seq 1 "${depth}"); do
+        # Make the first member a directory.
+        mkdir "${cwd}/${values[0]}"
+
+        # Make the remaining members files.
+        for item in "${values[@]:1}"; do
+            touch "${cwd}/$item"
+        done
+
+        cwd="${cwd}/${values[0]}"
     done
 }
 
@@ -44,21 +58,21 @@ build_test_directory() {
 printf "\nBuilding test directories...\n\n"
 
 # Strict matches.
-build_test_directory "flatcase_strict_matches"
-build_test_directory "camelcase_strict_matches"
-build_test_directory "pascalcase_strict_matches"
-build_test_directory "kebabcase_strict_matches"
-build_test_directory "cobolcase_strict_matches"
-build_test_directory "snakecase_strict_matches"
-build_test_directory "constantcase_strict_matches"
+build_test_directory "flatcase_strict_matches" 100
+build_test_directory "camelcase_strict_matches" 100
+build_test_directory "pascalcase_strict_matches" 100
+build_test_directory "kebabcase_strict_matches" 100
+build_test_directory "cobolcase_strict_matches" 100
+build_test_directory "snakecase_strict_matches" 100
+build_test_directory "constantcase_strict_matches" 100
 
 # Lenient matches
-build_test_directory "flatcase_lenient_matches"
-build_test_directory "camelcase_lenient_matches"
-build_test_directory "pascalcase_lenient_matches"
-build_test_directory "kebabcase_lenient_matches"
-build_test_directory "cobolcase_lenient_matches"
-build_test_directory "snakecase_lenient_matches"
-build_test_directory "constantcase_lenient_matches"
+build_test_directory "flatcase_lenient_matches" 100
+build_test_directory "camelcase_lenient_matches" 100
+build_test_directory "pascalcase_lenient_matches" 100
+build_test_directory "kebabcase_lenient_matches" 100
+build_test_directory "cobolcase_lenient_matches" 100
+build_test_directory "snakecase_lenient_matches" 100
+build_test_directory "constantcase_lenient_matches" 100
 
 printf "\nTest directories built successfully.\n\n"
