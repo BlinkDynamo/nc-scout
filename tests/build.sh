@@ -3,7 +3,7 @@
 # Copyright (c) 2024-2025 Josh Hayden (@BlinkDynamo)
 
 # This file should only be executed by the Makefile because it defines these variables.
-if [ -z ${BUILD_DIR} ] && [ -z ${TESTS_DIR} ]; then
+if [ -z "${BUILD_DIR}" ] && [ -z "${TESTS_DIR}" ]; then
     printf "%s\n%s\n" \
            "Error: build-tests.sh is a child script of the Makefile." \
            "It should not be executed manually."
