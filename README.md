@@ -8,11 +8,13 @@
 * [Installation](#installation)
 
 ## Description
-nc-scout is a simple naming convention checker tool. It is intended to help you enforce naming conventions on directory structures. 
+nc-scout is a simple naming convention checker tool. It is intended to help you enforce naming 
+conventions on directory structures. 
 
 ## Dependencies
 * make
-* POSIX-compliant system (Linux, MacOS)
+* GNU and POSIX compliant system (relies on gcc and glibc)
+* BASH (would more than likely work fine with other shells, although, BASH-specific features are used).
 
 ## Usage
 The layout of a nc-scout command.
@@ -20,27 +22,30 @@ The layout of a nc-scout command.
 nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 
 ### Options
-Options are command specific. To learn about the specific options available for a command, use `nc-scout [COMMAND] --help`
+Options are command specific. To learn about the specific options available for a command, use 
+`nc-scout [COMMAND] --help`
 
 ### Commands
-|Command            | Description                                                                      |
-|-------------------|----------------------------------------------------------------------------------|
-| `search`          | Search a directory for files that do not match a naming convention.              |
-| `analyze`         | Displays the percentage of files that follow a naming convention in a directory. |
+|Command        | Description                                                                      |
+|---------------|----------------------------------------------------------------------------------|
+| `search`      | Search a directory for files that do not match a naming convention.              |
+| `analyze`     | Displays the percentage of files that follow a naming convention in a directory. |
 
 ### Conventions
-| Convention        | Example                                                                          |
-|-------------------|----------------------------------------------------------------------------------|
-| `camelcase`       | exampleFileName.txt                                                              |
-| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                                            |
-| `constantcase`    | EXAMPLE_FILE_NAME.txt                                                            |
-| `flatcase`        | examplefilename.txt                                                              |
-| `kebabcase`       | example-file-name.txt                                                            |
-| `pascalcase`      | ExampleFileName.txt                                                              |
-| `snakecase`       | example_file_name.txt                                                            |
+| Convention    | Example                                                                          |
+|---------------|----------------------------------------------------------------------------------|
+| `camelcase`   | exampleFileName.txt                                                              |
+| `cobolcase`   | EXAMPLE-FILE-NAME.txt                                                            |
+| `constantcase`| EXAMPLE_FILE_NAME.txt                                                            |
+| `flatcase`    | examplefilename.txt                                                              |
+| `kebabcase`   | example-file-name.txt                                                            |
+| `pascalcase`  | ExampleFileName.txt                                                              |
+| `snakecase`   | example_file_name.txt                                                            |
 
 ### What is the Filename Body of a Filename?
-The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions. The final period itself and the text that follows it is what is defined as the file extention. `search` is only performed on the filename body of a filename.
+The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions.
+The final period itself and the text that follows it is what is defined as the file extention. nc-scout 
+subcommands are only performed on the filename body of a filename.
 
 ```bash
 # Search for matches:
@@ -62,7 +67,9 @@ example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the
 The default enforcement of naming conventions for a search is lenient, although, using
 the `-s` or `--strict` option, you can strictly enforce the naming convention for that search.
 
-Strict enforcement means that the naming convention **must** be present in it's entirety in the filename body, while lenient enforcement means that the naming convention **could** be present in it's entirety in the filename body if more text is added, but not removed or changed.
+Strict enforcement means that the naming convention **must** be present in it's entirety in the
+filename body, while lenient enforcement means that the naming convention **could** be present 
+in it's entirety in the filename body if more text is added, but not removed or changed.
 
 Example File: **example.txt** <em>(filename body is 'example')</em>
 
