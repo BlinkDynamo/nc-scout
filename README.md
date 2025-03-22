@@ -49,7 +49,7 @@ subcommands are only performed on the filename body of a filename.
 
 ```bash
 # Search for matches:
-nc-scout search snakecase --matches ./
+nc-scout search --matches snakecase ./
 # Output:
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is snakecase.
 example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
