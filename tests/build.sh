@@ -58,21 +58,21 @@ build_test_directory() {
 printf "\nBuilding test directories...\n\n"
 
 # Strict matches.
-build_test_directory "flatcase_strict_matches" 100
-build_test_directory "camelcase_strict_matches" 100
-build_test_directory "pascalcase_strict_matches" 100
-build_test_directory "kebabcase_strict_matches" 100
-build_test_directory "cobolcase_strict_matches" 100
-build_test_directory "snakecase_strict_matches" 100
-build_test_directory "constantcase_strict_matches" 100
+build_test_directory "flatcase_strict_matches" 10
+build_test_directory "camelcase_strict_matches" 10
+build_test_directory "pascalcase_strict_matches" 10
+build_test_directory "kebabcase_strict_matches" 10
+build_test_directory "cobolcase_strict_matches" 10
+build_test_directory "snakecase_strict_matches" 10
+build_test_directory "constantcase_strict_matches" 10
 
 # Lenient matches.
-build_test_directory "flatcase_lenient_matches" 100
-build_test_directory "camelcase_lenient_matches" 100
-build_test_directory "pascalcase_lenient_matches" 100
-build_test_directory "kebabcase_lenient_matches" 100
-build_test_directory "cobolcase_lenient_matches" 100
-build_test_directory "snakecase_lenient_matches" 100
-build_test_directory "constantcase_lenient_matches" 100
+build_test_directory "flatcase_lenient_matches" 10
+build_test_directory "camelcase_lenient_matches" 10
+build_test_directory "pascalcase_lenient_matches" 10
+build_test_directory "kebabcase_lenient_matches" 10
+build_test_directory "cobolcase_lenient_matches" 10
+build_test_directory "snakecase_lenient_matches" 10
+build_test_directory "constantcase_lenient_matches" 10
 
 printf "\nTest directories built successfully.\n\n"

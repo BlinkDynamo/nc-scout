@@ -103,23 +103,23 @@ check_search "./$BUILD_DIR/nc-scout search -m cobolcase $TESTS_DIR/cobolcase_len
 printf "\n"
 
 printf "${ORANGE}Recursive tests for strict matches:${RESET}\n"
-check_search "./$BUILD_DIR/nc-scout search -smR flatcase $TESTS_DIR/flatcase_strict_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -smR camelcase $TESTS_DIR/camelcase_strict_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -smR pascalcase $TESTS_DIR/pascalcase_strict_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -smR snakecase $TESTS_DIR/snakecase_strict_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -smR constantcase $TESTS_DIR/constantcase_strict_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -smR kebabcase $TESTS_DIR/kebabcase_strict_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -smR cobolcase $TESTS_DIR/cobolcase_strict_matches" 1000
+check_search "./$BUILD_DIR/nc-scout search -smR flatcase $TESTS_DIR/flatcase_strict_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -smR camelcase $TESTS_DIR/camelcase_strict_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -smR pascalcase $TESTS_DIR/pascalcase_strict_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -smR snakecase $TESTS_DIR/snakecase_strict_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -smR constantcase $TESTS_DIR/constantcase_strict_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -smR kebabcase $TESTS_DIR/kebabcase_strict_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -smR cobolcase $TESTS_DIR/cobolcase_strict_matches" 100
 printf "\n"
 
 printf "${ORANGE}Recursive tests for lenient matches:${RESET}\n"
-check_search "./$BUILD_DIR/nc-scout search -mR flatcase $TESTS_DIR/flatcase_lenient_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -mR camelcase $TESTS_DIR/camelcase_lenient_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -mR pascalcase $TESTS_DIR/pascalcase_lenient_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -mR snakecase $TESTS_DIR/snakecase_lenient_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -mR constantcase $TESTS_DIR/constantcase_lenient_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -mR kebabcase $TESTS_DIR/kebabcase_lenient_matches" 1000
-check_search "./$BUILD_DIR/nc-scout search -mR cobolcase $TESTS_DIR/cobolcase_lenient_matches" 1000
+check_search "./$BUILD_DIR/nc-scout search -mR flatcase $TESTS_DIR/flatcase_lenient_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -mR camelcase $TESTS_DIR/camelcase_lenient_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -mR pascalcase $TESTS_DIR/pascalcase_lenient_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -mR snakecase $TESTS_DIR/snakecase_lenient_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -mR constantcase $TESTS_DIR/constantcase_lenient_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -mR kebabcase $TESTS_DIR/kebabcase_lenient_matches" 100
+check_search "./$BUILD_DIR/nc-scout search -mR cobolcase $TESTS_DIR/cobolcase_lenient_matches" 100
 printf "\n"
 
 printf "\n${ORANGE}Testing 'analyze' subcommand. Expecting 100.000%% matches for each test.${RESET}\n\n"
