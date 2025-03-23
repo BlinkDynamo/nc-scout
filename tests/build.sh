@@ -24,32 +24,36 @@ build_test_directory() {
 
     # The current working directory of the function.
     local cwd="${TESTS_DIR}/${testname}"
+    
+    if [ -d "${cwd}" ]; then
+        printf "Test directory '%s' has already been built.\n" "${testname}"
+    else
+        mkdir -p "${cwd}"
+        printf "Built test directory '%s'.\n" "${testname}"
 
-    mkdir -p "${cwd}"
-    printf "Built test directory '%s'.\n" "${testname}"
+        # Construct the variable name dynamically.
 
-    # Construct the variable name dynamically.
+        # Use eval to access the array.
+        eval "values=(\"\${${testname}[@]}\")"
+        if eval "[[ -z \"\${${testname}[*]}\" ]]" 2>/dev/null; then
+            echo "Unable to evaluate $testname to an array."
+            return
+        fi
 
-    # Use eval to access the array.
-    eval "values=(\"\${${testname}[@]}\")"
-    if eval "[[ -z \"\${${testname}[*]}\" ]]" 2>/dev/null; then
-        echo "Unable to evaluate $testname to an array."
-        return
-    fi
+        # For a number of iterations "depth", create values[0] as a directory, values[1] through
+        # values[-1] as files, and cd inside of values[0].
+        for i in $(seq 1 "${depth}"); do
+            # Make the first member a directory.
+            mkdir "${cwd}/${values[0]}"
 
-    # For a number of iterations "depth", create values[0] as a directory, values[1] through
-    # values[-1] as files, and cd inside of values[0].
-    for i in $(seq 1 "${depth}"); do
-        # Make the first member a directory.
-        mkdir "${cwd}/${values[0]}"
+            # Make the remaining members files.
+            for item in "${values[@]:1}"; do
+                touch "${cwd}/$item"
+            done
 
-        # Make the remaining members files.
-        for item in "${values[@]:1}"; do
-            touch "${cwd}/$item"
+            cwd="${cwd}/${values[0]}"
         done
-
-        cwd="${cwd}/${values[0]}"
-    done
+    fi
 }
 
 #----------------------------------------------------------------------------------------------#
@@ -75,4 +79,4 @@ build_test_directory "cobolcase_lenient_matches" 10
 build_test_directory "snakecase_lenient_matches" 10
 build_test_directory "constantcase_lenient_matches" 10
 
-printf "\nTest directories built successfully.\n\n"
+printf "\nBuild step completed.\n\n"
