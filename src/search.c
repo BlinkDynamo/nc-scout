@@ -48,10 +48,10 @@
 #define N_REQUIRED_ARGS 2
 
 // Flags.
-static bool full_path_flag = false;
-static bool matches_flag   = false;
-static bool strict_flag    = false;
-static bool recursive_flag = false;
+static bool full_path_flag      = false;
+static bool non_matches_flag    = false;
+static bool strict_flag         = false;
+static bool recursive_flag      = false;
 
 static const char *abs_initial_search_path = NULL;
 
@@ -74,8 +74,8 @@ static void process_current_file (struct dirent *current_file, const char *abs_s
 *
 **********************************************************************************************/
 {
-    bool should_print = (matches_flag && naming_match_regex(regex, current_file->d_name)) ||
-                        (!matches_flag && !naming_match_regex(regex, current_file->d_name));
+    bool should_print = (!non_matches_flag && naming_match_regex(regex, current_file->d_name)) ||
+                        (non_matches_flag && !naming_match_regex(regex, current_file->d_name));
 
     if (should_print)
     {
@@ -183,7 +183,7 @@ int subc_exec_search (int argc, char *argv[])
         {
             {"help", no_argument, 0, 'h'},
             {"full-path", no_argument, 0, 'f'}, 
-            {"matches", no_argument, 0, 'm'},
+            {"non-matches", no_argument, 0, 'n'},
             {"strict", no_argument, 0, 's'},
             {"recursive", no_argument, 0, 'R'},
             {0, 0, 0, 0}
@@ -216,8 +216,8 @@ int subc_exec_search (int argc, char *argv[])
                 full_path_flag = true;
                 break;
 
-            case 'm':
-                matches_flag = true;
+            case 'n':
+                non_matches_flag = true;
                 break;
 
             case 's':
