@@ -55,11 +55,11 @@
 "Searches a directory for files and directories that do not match a naming convention.\n" \
 "\n" \
 "<OPTIONS>:\n" \
-"  -h, --help       Show this help message.\n" \
-"  -f, --full-path  Display the discovered files/directories as full-paths.\n" \
-"  -m, --matches    Display matches to the convention instead of non-matches.\n" \
-"  -s, --strict     Enforce the naming convention strictly.\n" \
-"  -R, --recursive  Recursively search through subdirectories.\n" \
+"  -h, --help           Show this help message.\n" \
+"  -f, --full-path      Display the discovered files/directories as full-paths.\n" \
+"  -n, --non-matches    Display non-matches to the convention instead of matches.\n" \
+"  -s, --strict         Enforce the naming convention strictly.\n" \
+"  -R, --recursive      Recursively search through subdirectories.\n" \
 "\n" \
 "[CONVENTION]:\n" \
 "  flatcase         examplefilename.txt\n" \

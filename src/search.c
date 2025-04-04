@@ -148,8 +148,8 @@ static void search_directory (const char *search_path, regex_t regex)
                 search_directory(abs_new_search_path, regex);
             }
         }
-        // Else if the current file is a regular file...
-        else if (current_file->d_type == DT_REG) { 
+        // Else if the current file is a regular file or a symlink...
+        else if ((current_file->d_type == DT_REG) || (current_file->d_type == DT_LNK)) { 
 
             // Process it.
             process_current_file(current_file, abs_search_path, abs_initial_search_path, regex);
@@ -190,7 +190,7 @@ int subc_exec_search (int argc, char *argv[])
         };
         
         int option_index = 0;
-        current_opt = getopt_long (argc, argv, "+hfmsR", long_options_search, &option_index);
+        current_opt = getopt_long (argc, argv, "+hfnsR", long_options_search, &option_index);
         // Break if at the end of the options.
         if (current_opt == -1) {
             break;
