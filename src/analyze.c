@@ -64,16 +64,14 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
 *
 *   analyze_path     The directory where the analyze will take place.
 *
-*   regex           The compiled regex of the convention being analyzeed for.
+*   regex            The compiled regex of the convention being analyzeed for.
 *
 **********************************************************************************************/
 {
-    char *abs_analyze_path = canonicalize_file_name(analyze_path);
-    
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
-    DIR *current_dir = opendir(abs_analyze_path);
+    DIR *current_dir = opendir(analyze_path);
     if (current_dir == NULL) {
-        printf("Error: cannot access %s due to Error %d (%s).\n", abs_analyze_path, errno, 
+        printf("Error: cannot access %s due to Error %d (%s).\n", analyze_path, errno, 
                 strerror(errno));
         return;
     }
@@ -97,13 +95,13 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
                 non_matches++;
             }
 
-            // Then if recursive_flag is true, concatenate abs_analyze_path with current_file->d_name
+            // Then if recursive_flag is true, concatenate analyze_path with current_file->d_name
             // and call analyze_directory at that location.
             if (recursive_flag == true) {
-                char abs_new_analyze_path[PATH_MAX];
-                snprintf(abs_new_analyze_path, sizeof(abs_new_analyze_path), "%s/%s", abs_analyze_path, 
+                char new_analyze_path[PATH_MAX];
+                snprintf(new_analyze_path, sizeof(new_analyze_path), "%s/%s", analyze_path, 
                          current_file->d_name);
-                analyze_directory(abs_new_analyze_path, regex);
+                analyze_directory(new_analyze_path, regex);
             }
         }
         // Else if the current file is a regular file...
@@ -117,8 +115,6 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
             }
         }
     }
-    free(abs_analyze_path);
-
     closedir(current_dir);
 }
 
@@ -140,7 +136,9 @@ int subc_exec_analyze (int argc, char *argv[])
 *
 **********************************************************************************************/
 {
+    int status = EXIT_FAILURE;
     int current_opt;
+
     while (1)
     {
         static struct option long_options_analyze[] =
@@ -161,17 +159,18 @@ int subc_exec_analyze (int argc, char *argv[])
         switch (current_opt)
         {
             case '?':
-                return EXIT_FAILURE;
+                return status;
 
             case 'h':
                 // Make sure that there are no arguments supplied.
                 if (argc == 2) {
                     printf("%s", HELP_ANALYZE);
-                    return EXIT_SUCCESS;
+                    status = EXIT_SUCCESS;
+                    return status;
                 }
                 else {
                     printf("Incorrect usage.\nDo `nc-scout analyze --help` for more information about usage.\n");
-                    return EXIT_FAILURE;
+                    return status;
                 }
 
             case 's':
@@ -190,11 +189,11 @@ int subc_exec_analyze (int argc, char *argv[])
     int non_option_argc = argc - optind;
     if (non_option_argc < N_REQUIRED_ARGS) {
         printf("Insufficient arguments.\nDo `nc-scout analyze --help` for more information about usage.\n");
-        return EXIT_FAILURE;
+        return status;
     }
 
     const char *arg_naming_convention = argv[optind];
-    const char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
+    char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
 
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     const char *analyze_expression;
@@ -220,7 +219,8 @@ int subc_exec_analyze (int argc, char *argv[])
                 percentage(matches, matches + non_matches), 
                 arg_target_dirname);
 
-        return EXIT_SUCCESS;
+        status = EXIT_SUCCESS;
     }
-    return EXIT_FAILURE;
+    free(arg_target_dirname);
+    return status;
 }
