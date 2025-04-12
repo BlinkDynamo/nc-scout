@@ -68,7 +68,7 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
 *
 **********************************************************************************************/
 {
-    const char *abs_analyze_path = canonicalize_file_name(analyze_path);
+    char *abs_analyze_path = canonicalize_file_name(analyze_path);
     
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
     DIR *current_dir = opendir(abs_analyze_path);
@@ -117,6 +117,8 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
             }
         }
     }
+    free(abs_analyze_path);
+
     closedir(current_dir);
 }
 

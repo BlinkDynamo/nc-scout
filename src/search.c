@@ -109,7 +109,7 @@ static void search_directory (const char *search_path, regex_t regex)
 *
 **********************************************************************************************/
 {
-    const char *abs_search_path = canonicalize_file_name(search_path);
+    char *abs_search_path = canonicalize_file_name(search_path);
     
     // If this is the first time search_directory has been called, save the absolute initial search path.
     if (abs_initial_search_path == NULL) {
@@ -155,6 +155,8 @@ static void search_directory (const char *search_path, regex_t regex)
             process_current_file(current_file, abs_search_path, abs_initial_search_path, regex);
         }
     }
+    free(abs_search_path);
+
     closedir(current_dir);
 }
 
