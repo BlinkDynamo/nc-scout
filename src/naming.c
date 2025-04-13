@@ -148,19 +148,18 @@ bool naming_set_expression (const char *arg_naming_convention, const char **ptr_
 // Attempts to compile a pattern to a regex pointed to by *regex, returning true if successful.
 bool naming_compile_regex (regex_t *regex, const char *expression)
 {
-    if (regcomp(regex, expression, REG_EXTENDED) != 0) {
-        printf("Error: Failed to compile regex.\n");
-        return false; 
+    int regex_return = regcomp(regex, expression, REG_EXTENDED);
+    if (regex_return == 0) {
+        return true; 
     }
-    return true;
+    printf("Error: Failed to compile regex.\n");
+    return false;
 }
 
 // Attempts to match a regex to a filename, returning true if a match.
 bool naming_match_regex (regex_t regex, const char *filename)
 {
-    int regex_return;
-    regex_return = regexec(&regex, filename, 0, NULL, 0);
-    
+    int regex_return = regexec(&regex, filename, 0, NULL, 0); 
     if (regex_return == 0) {
         return true;
     }
