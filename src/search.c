@@ -256,6 +256,9 @@ int subc_exec_search (int argc, char *argv[])
         search_directory(arg_target_dirname, search_regex); 
         status = EXIT_SUCCESS;
     }
+
     free(arg_target_dirname);
+    regfree(&search_regex);
+
     return status;
 }

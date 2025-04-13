@@ -221,6 +221,9 @@ int subc_exec_analyze (int argc, char *argv[])
 
         status = EXIT_SUCCESS;
     }
+
     free(arg_target_dirname);
+    regfree(&analyze_regex);
+
     return status;
 }
