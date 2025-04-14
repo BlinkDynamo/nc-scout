@@ -16,6 +16,7 @@ conventions on directory structures.
 * GNU and POSIX compliant system (relies on gcc and glibc)
 * BASH (would more than likely work fine with other shells, although, BASH-specific features are used).
 * valgrind (for the test suite).
+* grep (for the test suite).
 
 ## Usage
 The layout of a nc-scout command.
