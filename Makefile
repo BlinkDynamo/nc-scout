@@ -20,8 +20,7 @@ BIN_DIR = $(PREFIX)/bin
 SRCS = src/main.c src/validate.c src/naming.c src/search.c src/analyze.c src/common.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 EXEC = $(BUILD_DIR)/nc-scout
-TESTS_EXEC_BUILD = tests/build.sh
-TESTS_EXEC_CHECK = tests/check.sh
+TESTS_EXEC = tests/init.sh && tests/build.sh && tests/check.sh
 
 # Exports. Used by scripts in tests/.
 export BUILD_DIR := $(BUILD_DIR)
@@ -35,8 +34,7 @@ export TESTS_DIR := $(TESTS_DIR)
 all: $(BUILD_DIR) $(EXEC)
 
 check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)
-	$(TESTS_EXEC_BUILD)	
-	$(TESTS_EXEC_CHECK)
+	$(TESTS_EXEC)
 
 install: $(EXEC)
 	install -d $(DESTDIR)$(BIN_DIR)
@@ -53,7 +51,6 @@ $(BUILD_DIR)/$(SRC_DIR)/%.o: src/%.c
 
 clean:
 	rm -rf $(BUILD_DIR) 
-	rm -rf $(TESTS_DIR)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)/$(SRC_DIR)

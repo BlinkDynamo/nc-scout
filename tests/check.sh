@@ -10,14 +10,12 @@ if [ -z "${BUILD_DIR}" ] && [ -z "${TESTS_DIR}" ]; then
     exit 1
 fi
 
+# Source the data file with filename arrays.
+source "tests/data.sh.inc"
+
 #----------------------------------------------------------------------------------------------#
 # Definitions 
 #----------------------------------------------------------------------------------------------#
-GREEN="\033[0;32m"
-RED="\033[0;31m"
-ORANGE="\033[0;33m"
-RESET="\033[0m"
-
 # Counters incremented by test functions.
 tests_passed=0
 tests_executed=0
@@ -33,6 +31,10 @@ function check_search()
     # Firstly, check if the test_command exits with a non-zero exit code. If so, print an error message.
     if ! $test_command>/dev/null; then
         printf "%b %s\n" "[${RED}!${RESET}]" "Error: '$test_command' exited abnormally."
+
+    elif ! valgrind --error-exitcode=1 --leak-check=full $test_command > /dev/null 2>&1; then 
+        printf "%b %s\n" "[${RED}!${RESET}]" "Error: valgrind ran '$test_command' and returned an error."
+
     else
         local n_observed_correct=$($test_command | wc -l)
         
@@ -61,6 +63,9 @@ function check_analyze()
     # Firstly, check if the test_command exits with a non-zero exit code. If so, print an error message.
     if ! $test_command>/dev/null; then
         printf "%b %s\n" "[${RED}!${RESET}]" "Error: '$test_command' exited abnormally."
+
+    elif ! valgrind --error-exitcode=1 --leak-check=full $test_command > /dev/null 2>&1; then 
+        printf "%b %s\n" "[${RED}!${RESET}]" "Error: valgrind ran '$test_command' and returned an error."
 
     elif [ "$($test_command | grep -o "make up ${p_expected_correct}% of" | wc -l)" -eq 1 ]; then
         

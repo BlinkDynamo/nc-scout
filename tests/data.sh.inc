@@ -4,15 +4,24 @@
 
 # This is a shell include file. It should not be executed!
 
+#----------------------------------------------------------------------------------------------#
+# Shared Variables
+#----------------------------------------------------------------------------------------------#
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+ORANGE="\033[0;33m"
+RESET="\033[0m"
+
+#----------------------------------------------------------------------------------------------#
+# Test Filenames
+#----------------------------------------------------------------------------------------------#
+
 # Each of these arrays are filled with filenames correct to the convention the array name
 # specifies. The first member of each array will become a directory, and all following members
 # will become files. This first member (the directory) will be the location where recursive
 # search tests will be placed. Following this convention, we can simply re-create files and 
 # directories from the array inside of the first member we just made.
 
-#----------------------------------------------------------------------------------------------#
-# Test Filenames
-#----------------------------------------------------------------------------------------------#
 # Camelcase.
 camelcase_lenient_matches=(
 "camel"
