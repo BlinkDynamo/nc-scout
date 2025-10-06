@@ -36,9 +36,8 @@
 
 bool validate_file_exists (const char *filepath)
 {
-    // Check if the file doesn't exist.
-    if (access(filepath, F_OK) != 0) {
-        printf("Error: '%s' does not exist.\n", filepath);
+    if (filepath == NULL) {
+        printf("Error: supplied file path is invalid.\n");
         return false;
     }    
     return true;

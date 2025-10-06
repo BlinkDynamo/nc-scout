@@ -136,7 +136,6 @@ int subc_exec_analyze (int argc, char *argv[])
 *
 **********************************************************************************************/
 {
-    int status = EXIT_FAILURE;
     int current_opt;
 
     while (1)
@@ -159,18 +158,17 @@ int subc_exec_analyze (int argc, char *argv[])
         switch (current_opt)
         {
             case '?':
-                return status;
+                return EXIT_FAILURE;
 
             case 'h':
                 // Make sure that there are no arguments supplied.
                 if (argc == 2) {
                     printf("%s", HELP_ANALYZE);
-                    status = EXIT_SUCCESS;
-                    return status;
+                    return EXIT_SUCCESS;
                 }
                 else {
                     printf("Incorrect usage.\nDo `nc-scout analyze --help` for more information about usage.\n");
-                    return status;
+                    return EXIT_FAILURE;
                 }
 
             case 's':
@@ -189,7 +187,7 @@ int subc_exec_analyze (int argc, char *argv[])
     int non_option_argc = argc - optind;
     if (non_option_argc < N_REQUIRED_ARGS) {
         printf("Insufficient arguments.\nDo `nc-scout analyze --help` for more information about usage.\n");
-        return status;
+        return EXIT_FAILURE;
     }
 
     const char *arg_naming_convention = argv[optind];
@@ -219,11 +217,10 @@ int subc_exec_analyze (int argc, char *argv[])
                 percentage(matches, matches + non_matches), 
                 arg_target_dirname);
 
-        status = EXIT_SUCCESS;
-    }
+        free(arg_target_dirname);
+        regfree(&analyze_regex);
 
-    free(arg_target_dirname);
-    regfree(&analyze_regex);
-
-    return status;
+        return EXIT_SUCCESS;
+    } 
+    return EXIT_FAILURE;
 }

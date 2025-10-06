@@ -174,7 +174,6 @@ int subc_exec_search (int argc, char *argv[])
 *
 **********************************************************************************************/
 {
-    int status = EXIT_FAILURE;
     int current_opt;
 
     while (1)
@@ -199,18 +198,17 @@ int subc_exec_search (int argc, char *argv[])
         switch (current_opt)
         {
             case '?':
-                return status;
+                return EXIT_FAILURE;
 
             case 'h':
                 // Make sure that there are no arguments supplied.
                 if (argc == 2) {
                     printf("%s", HELP_SEARCH);
-                    status = EXIT_SUCCESS;
-                    return status;
+                    return EXIT_SUCCESS;
                 }
                 else {
                     printf("Incorrect usage.\nDo `nc-scout search --help` for more information about usage.\n");
-                    return status;
+                    return EXIT_FAILURE;
                 }
 
             case 'f':
@@ -237,7 +235,7 @@ int subc_exec_search (int argc, char *argv[])
     int non_option_argc = argc - optind;
     if (non_option_argc < N_REQUIRED_ARGS) {
         printf("Insufficient arguments.\nDo `nc-scout search --help` for more information about usage.\n");
-        return status;
+        return EXIT_FAILURE;
     }
 
     const char *arg_naming_convention = argv[optind];
@@ -254,11 +252,9 @@ int subc_exec_search (int argc, char *argv[])
         (naming_compile_regex(&search_regex, search_expression)))
     {     
         search_directory(arg_target_dirname, search_regex); 
-        status = EXIT_SUCCESS;
+        free(arg_target_dirname);
+        regfree(&search_regex);
+        return EXIT_SUCCESS;
     }
-
-    free(arg_target_dirname);
-    regfree(&search_regex);
-
-    return status;
+    return EXIT_FAILURE;
 }
