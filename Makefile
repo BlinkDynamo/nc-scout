@@ -3,9 +3,8 @@
 #----------------------------------------------------------------------------------------------#
 # Compiler + flags to use. To omit debug flags, put a # to the right of the equals sign.
 CC = gcc
-CFLAGS_CORE     = -std=c99 -pedantic -Iinclude -O2
+CFLAGS_CORE     = -std=c99 -pedantic -Iinclude -O3
 CFLAGS_WARNINGS = -Wall -Wextra -Werror
-CFLAGS_DEBUG    = -g -ggdb3
 
 # Installation prefix.
 PREFIX ?= /usr/local
@@ -47,7 +46,7 @@ $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)
 
 $(BUILD_DIR)/$(SRC_DIR)/%.o: src/%.c
-	$(CC) $(CFLAGS_CORE) $(CFLAGS_WARNINGS) $(CFLAGS_DEBUG) -c $< -o $@
+	$(CC) $(CFLAGS_CORE) $(CFLAGS_WARNINGS) -c $< -o $@
 
 clean:
 	rm -rf $(BUILD_DIR) 
