@@ -203,8 +203,8 @@ int subc_exec_analyze (int argc, char *argv[])
     regex_t analyze_regex;
 
     if ((naming_set_expression(arg_naming_convention, &analyze_expression, strict_flag)) &&
-        (validate_file_exists(arg_target_dirname)) &&
-        (validate_file_is_dir(arg_target_dirname)) &&
+        (is_file_valid(arg_target_dirname)) &&
+        (is_file_dir(arg_target_dirname)) &&
         (naming_compile_regex(&analyze_regex, analyze_expression)))
     {
         analyze_directory(arg_target_dirname, analyze_regex);
@@ -225,6 +225,9 @@ int subc_exec_analyze (int argc, char *argv[])
         regfree(&analyze_regex);
 
         return EXIT_SUCCESS;
+    }
+    if (arg_target_dirname != NULL && !is_file_dir(arg_target_dirname)) {
+        printf("Error: '%s' is not a directory.\n", arg_target_dirname);
     }
     free(arg_target_dirname);
     return EXIT_FAILURE;

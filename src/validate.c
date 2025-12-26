@@ -34,7 +34,7 @@
 
 #include "validate.h"
 
-bool validate_file_exists (const char *filepath)
+bool is_file_valid (const char *filepath)
 {
     // Check if canonicalize_file_name() returned NULL (file doesn't exist or path is invalid).
     if (filepath == NULL) {
@@ -44,17 +44,11 @@ bool validate_file_exists (const char *filepath)
     return true;
 }
 
-bool validate_file_is_dir (const char *filepath)
+bool is_file_dir (const char *filepath)
 {
-    // Check if the file is a directory.
     struct stat filepath_stat;
     if (stat(filepath, &filepath_stat) != 0) {
-        printf("Error: cannot stat '%s'.\n", filepath);
         return false;
     }
-    if (!S_ISDIR(filepath_stat.st_mode)) {
-        printf("Error: '%s' is not a directory.\n", filepath);
-        return false;
-    }
-    return true;
+    return S_ISDIR(filepath_stat.st_mode);
 }

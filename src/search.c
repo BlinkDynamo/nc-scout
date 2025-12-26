@@ -247,14 +247,17 @@ int subc_exec_search (int argc, char *argv[])
     regex_t search_regex;
 
     if ((naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
-        (validate_file_exists(arg_target_dirname)) &&
-        (validate_file_is_dir(arg_target_dirname)) &&
+        (is_file_valid(arg_target_dirname)) &&
+        (is_file_dir(arg_target_dirname)) &&
         (naming_compile_regex(&search_regex, search_expression)))
     {
         search_directory(arg_target_dirname, search_regex);
         free(arg_target_dirname);
         regfree(&search_regex);
         return EXIT_SUCCESS;
+    }
+    if (arg_target_dirname != NULL && !is_file_dir(arg_target_dirname)) {
+        printf("Error: '%s' is not a directory.\n", arg_target_dirname);
     }
     free(arg_target_dirname);
     return EXIT_FAILURE;

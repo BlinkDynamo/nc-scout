@@ -32,8 +32,8 @@
 
 #include <stdbool.h>
 
-bool validate_file_exists (const char *filepath);
+bool is_file_valid (const char *filepath);
 
-bool validate_file_is_dir (const char *filepath);
+bool is_file_dir (const char *filepath);
 
 #endif // VALIDATE_H
