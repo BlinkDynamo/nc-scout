@@ -47,7 +47,10 @@ bool validate_file_is_dir (const char *filepath)
 {
     // Check if the file is a directory.
     struct stat filepath_stat;
-    stat(filepath, &filepath_stat);
+    if (stat(filepath, &filepath_stat) != 0) {
+        printf("Error: cannot stat '%s'.\n", filepath);
+        return false;
+    }
     if (!S_ISDIR(filepath_stat.st_mode)) {
         printf("Error: '%s' is not a directory.\n", filepath);
         return false;
