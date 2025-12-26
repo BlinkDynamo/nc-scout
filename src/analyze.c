@@ -85,8 +85,16 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
             continue;
         }
 
+        // Build full path for stat() fallback when d_type is DT_UNKNOWN.
+        char full_path[PATH_MAX];
+        snprintf(full_path, sizeof(full_path), "%s/%s", analyze_path, current_file->d_name);
+
+        // Determine if current entry is a directory (with fallback for DT_UNKNOWN).
+        bool is_dir = (current_file->d_type == DT_DIR) ||
+                      (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
+
         // If the current file is a directory...
-        if (current_file->d_type == DT_DIR) {
+        if (is_dir) {
 
             // Process it.
             if (naming_match_regex(regex, current_file->d_name)) {
@@ -95,17 +103,13 @@ static void analyze_directory (const char *analyze_path, regex_t regex)
                 non_matches++;
             }
 
-            // Then if recursive_flag is true, concatenate analyze_path with current_file->d_name
-            // and call analyze_directory at that location.
+            // Then if recursive_flag is true, call analyze_directory at that location.
             if (recursive_flag == true) {
-                char new_analyze_path[PATH_MAX];
-                snprintf(new_analyze_path, sizeof(new_analyze_path), "%s/%s", analyze_path, 
-                         current_file->d_name);
-                analyze_directory(new_analyze_path, regex);
+                analyze_directory(full_path, regex);
             }
         }
         // Else if the current file is a regular file...
-        else if (current_file->d_type == DT_REG) { 
+        else if (current_file->d_type == DT_REG || current_file->d_type == DT_UNKNOWN) {
 
             // Process it.
             if (naming_match_regex(regex, current_file->d_name)) {

@@ -131,23 +131,28 @@ static void search_directory (const char *search_path, regex_t regex)
             continue;
         }
 
+        // Build full path for stat() fallback when d_type is DT_UNKNOWN.
+        char full_path[PATH_MAX];
+        snprintf(full_path, sizeof(full_path), "%s/%s", search_path, current_file->d_name);
+
+        // Determine if current entry is a directory (with fallback for DT_UNKNOWN).
+        bool is_dir = (current_file->d_type == DT_DIR) ||
+                      (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
+
         // If the current file is a directory...
-        if (current_file->d_type == DT_DIR) {
+        if (is_dir) {
 
             // Process it.
             process_current_file(current_file, search_path, initial_search_path, regex);
 
-            // Then if recursive_flag is true, concatenate search_path with current_file->d_name
-            // and call search_directory at that location.
+            // Then if recursive_flag is true, call search_directory at that location.
             if (recursive_flag == true) {
-                char abs_new_search_path[PATH_MAX];
-                snprintf(abs_new_search_path, sizeof(abs_new_search_path), "%s/%s", search_path, 
-                         current_file->d_name);
-                search_directory(abs_new_search_path, regex);
+                search_directory(full_path, regex);
             }
         }
         // Else if the current file is a regular file or a symlink...
-        else if ((current_file->d_type == DT_REG) || (current_file->d_type == DT_LNK)) { 
+        else if ((current_file->d_type == DT_REG) || (current_file->d_type == DT_LNK) ||
+                 (current_file->d_type == DT_UNKNOWN)) {
 
             // Process it.
             process_current_file(current_file, search_path, initial_search_path, regex);
