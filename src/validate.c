@@ -36,10 +36,11 @@
 
 bool validate_file_exists (const char *filepath)
 {
+    // Check if canonicalize_file_name() returned NULL (file doesn't exist or path is invalid).
     if (filepath == NULL) {
-        printf("Error: supplied file path is invalid.\n");
+        printf("Error: file does not exist or path is invalid.\n");
         return false;
-    }    
+    }
     return true;
 }
 
