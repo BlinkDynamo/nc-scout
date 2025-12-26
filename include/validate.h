@@ -27,8 +27,8 @@
 *
 *********************************************************************************************/
 
-#ifndef VALIDATION_H
-#define VALIDATION_H
+#ifndef VALIDATE_H
+#define VALIDATE_H
 
 #include <stdbool.h>
 
@@ -36,4 +36,4 @@ bool validate_file_exists (const char *filepath);
 
 bool validate_file_is_dir (const char *filepath);
 
-#endif // VALIDATION_H
+#endif // VALIDATE_H
