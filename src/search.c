@@ -239,7 +239,7 @@ int subc_exec_search (int argc, char *argv[])
     }
 
     const char *arg_naming_convention = argv[optind];
-    char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]); 
+    char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
 
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     const char *search_expression;
@@ -247,14 +247,15 @@ int subc_exec_search (int argc, char *argv[])
     regex_t search_regex;
 
     if ((naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
-        (validate_file_exists(arg_target_dirname)) && 
-        (validate_file_is_dir(arg_target_dirname)) && 
+        (validate_file_exists(arg_target_dirname)) &&
+        (validate_file_is_dir(arg_target_dirname)) &&
         (naming_compile_regex(&search_regex, search_expression)))
-    {     
-        search_directory(arg_target_dirname, search_regex); 
+    {
+        search_directory(arg_target_dirname, search_regex);
         free(arg_target_dirname);
         regfree(&search_regex);
         return EXIT_SUCCESS;
     }
+    free(arg_target_dirname);
     return EXIT_FAILURE;
 }
