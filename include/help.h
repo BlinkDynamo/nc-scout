@@ -76,7 +76,7 @@
 "  ../Homework/     Relative paths to directories.\n" \
 "\n" \
 "  It should be noted that a search will only be done on contents within a specified location.\n" \
-"  A command such as `nc-scout search -m pascalcase ~/Documents/` would not output 'Documents',\n" \
+"  A command such as `nc-scout search pascalcase ~/Documents/` would not output 'Documents',\n" \
 "  even though 'Documents' is a pascalcase match.\n" \
 "\n" \
 "Strict vs. Lenient:\n" \
