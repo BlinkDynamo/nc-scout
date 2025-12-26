@@ -149,7 +149,7 @@ int subc_exec_analyze (int argc, char *argv[])
         };
         
         int option_index = 0;
-        current_opt = getopt_long (argc, argv, "+hfmsR", long_options_analyze, &option_index);
+        current_opt = getopt_long (argc, argv, "+hsR", long_options_analyze, &option_index);
         // Break if at the end of the options.
         if (current_opt == -1) {
             break;
