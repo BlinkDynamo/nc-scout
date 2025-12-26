@@ -57,11 +57,11 @@ nc-scout search --matches snakecase ./
 example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
 .example_file.RAR       # The file extention '.RAR' is ignored, resulting in the filename body 'example_file', which is snakecase.
 
-# Search for non-matches: 
+# Search for non-matches:
 nc-scout search flatcase ./
 # Output:
-..example_file          # The leading period is ignored, resulting in the filename body '.example', which is not snakecase.
-example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the filename body 'example_file.exe', which is not snakecase.
+.example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is not flatcase.
+example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the filename body 'example_file.exe', which is not flatcase.
 
 ```
 
