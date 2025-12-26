@@ -136,6 +136,10 @@ int subc_exec_analyze (int argc, char *argv[])
 *
 **********************************************************************************************/
 {
+    // Reset static counters for multiple invocations.
+    matches = 0;
+    non_matches = 0;
+
     int current_opt;
 
     while (1)
