@@ -4,7 +4,7 @@
 *
 *   LICENSE: zlib/libpng
 *
-*   Copyright (c) 2024-2025 Josh Hayden (@BlinkDynamo)
+*   Copyright (c) 2024-2025 Josh Hayden (@jhayden02)
 *
 *   This software is provided ‘as-is’, without any express or implied
 *   warranty. In no event will the authors be held liable for any damages
