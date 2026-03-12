@@ -84,6 +84,7 @@ int subc_exec_analyze (int argc, char *argv[])
     non_matches = 0;
     strict_flag = false;
     recursive_flag = false;
+    optind = 1;
 
     int current_opt;
 

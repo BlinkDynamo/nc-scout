@@ -122,6 +122,7 @@ int subc_exec_search (int argc, char *argv[])
     strict_flag = false;
     recursive_flag = false;
     initial_search_path = NULL;
+    optind = 1;
 
     int current_opt;
 
