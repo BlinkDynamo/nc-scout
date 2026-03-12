@@ -53,10 +53,10 @@ static bool recursive_flag      = false;
 static const char *initial_search_path = NULL;
 
 static void process_current_file (struct dirent *current_file, const char *search_path,
-                           const char *initial_search_path, const regex_t *regex)
+                                  const regex_t *regex)
 /**********************************************************************************************
 *
-*   Compares a d_name to a regular expression. Will print matches or non-matches depending on 
+*   Compares a d_name to a regular expression. Will print matches or non-matches depending on
 *   matches_flag.
 *
 *   ---------------------------------------- ARGUMENTS ----------------------------------------
@@ -64,8 +64,6 @@ static void process_current_file (struct dirent *current_file, const char *searc
 *   current_file                The pointer to the current file being processed.
 *
 *   search_path                 The absolute path of the dir current_file is searching in.
-*
-*   initial_search_path         The absolute path to the dir where search was first called.
 *
 *   regex                       The compiled regex of the convention being searched for.
 *
@@ -96,7 +94,7 @@ static void process_current_file (struct dirent *current_file, const char *searc
 static void search_callback (struct dirent *entry, const char *dir_path,
                              const regex_t *regex)
 {
-    process_current_file(entry, dir_path, initial_search_path, regex);
+    process_current_file(entry, dir_path, regex);
 }
 
 int subc_exec_search (int argc, char *argv[])
