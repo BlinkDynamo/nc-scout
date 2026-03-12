@@ -30,8 +30,6 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include <regex.h>
-
 int subc_exec_search (int argc, char *argv[]);
 
 #endif // SEARCH_H

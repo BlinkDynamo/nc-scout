@@ -30,8 +30,6 @@
 #ifndef ANALYZE_H
 #define ANALYZE_H
 
-#include <regex.h>
-
 int subc_exec_analyze (int argc, char *argv[]);
 
 #endif // ANALYZE_H
