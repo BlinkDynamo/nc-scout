@@ -69,8 +69,8 @@ static void process_current_file (struct dirent *current_file, const char *searc
 *
 **********************************************************************************************/
 {
-    bool should_print = (!non_matches_flag && naming_match_regex(regex, current_file->d_name)) ||
-                        (non_matches_flag && !naming_match_regex(regex, current_file->d_name));
+    bool is_match = naming_match_regex(regex, current_file->d_name);
+    bool should_print = (is_match != non_matches_flag);
 
     if (should_print)
     {
