@@ -109,7 +109,8 @@ static void analyze_directory (const char *analyze_path, const regex_t *regex)
             }
         }
         // Else if the current file is a regular file...
-        else if (current_file->d_type == DT_REG || current_file->d_type == DT_UNKNOWN) {
+        else if (current_file->d_type == DT_REG || current_file->d_type == DT_LNK ||
+                 current_file->d_type == DT_UNKNOWN) {
 
             // Process it.
             if (naming_match_regex(regex, current_file->d_name)) {
