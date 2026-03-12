@@ -34,10 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include <getopt.h>
-#include <errno.h>
-#include <limits.h>
 
 #include "help.h"
 #include "validate.h"
@@ -96,69 +93,10 @@ static void process_current_file (struct dirent *current_file, const char *searc
     }
 }
 
-static void search_directory (const char *search_path, const regex_t *regex)
-/**********************************************************************************************
-*
-*   Searches a directory for filenames that match a regular expression.
-*
-*   ---------------------------------------- ARGUMENTS ----------------------------------------
-*
-*   search_path     The directory where the search will take place.
-*
-*   regex           The compiled regex of the convention being searched for.
-*
-**********************************************************************************************/
+static void search_callback (struct dirent *entry, const char *dir_path,
+                             const regex_t *regex)
 {
-    // If this is the first time search_directory has been called, save the absolute initial search path.
-    if (initial_search_path == NULL) {
-        initial_search_path = search_path;
-    }
-
-    // dir_path is known to exist at this point, but opendir() can still fail from permissions.
-    DIR *current_dir = opendir(search_path);
-    if (current_dir == NULL) {
-        fprintf(stderr, "Error: cannot access %s due to Error %d (%s).\n", search_path,
-                errno, strerror(errno));
-        return;
-    }
-   
-    // Begin reading directories/files inside current_dir.
-    struct dirent *current_file;
-    while ((current_file = readdir(current_dir)) != NULL)
-    {
-        // Skip current and parent entries.
-        if (strcmp(current_file->d_name, ".") == 0 || strcmp(current_file->d_name, "..") == 0) {
-            continue;
-        }
-
-        // Build full path for stat() fallback when d_type is DT_UNKNOWN.
-        char full_path[PATH_MAX];
-        snprintf(full_path, sizeof(full_path), "%s/%s", search_path, current_file->d_name);
-
-        // Determine if current entry is a directory (with fallback for DT_UNKNOWN).
-        bool is_dir = (current_file->d_type == DT_DIR) ||
-                      (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
-
-        // If the current file is a directory...
-        if (is_dir) {
-
-            // Process it.
-            process_current_file(current_file, search_path, initial_search_path, regex);
-
-            // Then if recursive_flag is true, call search_directory at that location.
-            if (recursive_flag == true) {
-                search_directory(full_path, regex);
-            }
-        }
-        // Else if the current file is a regular file or a symlink...
-        else if ((current_file->d_type == DT_REG) || (current_file->d_type == DT_LNK) ||
-                 (current_file->d_type == DT_UNKNOWN)) {
-
-            // Process it.
-            process_current_file(current_file, search_path, initial_search_path, regex);
-        }
-    }
-    closedir(current_dir);
+    process_current_file(entry, dir_path, initial_search_path, regex);
 }
 
 int subc_exec_search (int argc, char *argv[])
@@ -264,7 +202,9 @@ int subc_exec_search (int argc, char *argv[])
         (target_is_dir) &&
         (naming_compile_regex(&search_regex, search_expression)))
     {
-        search_directory(arg_target_dirname, &search_regex);
+        initial_search_path = arg_target_dirname;
+        traverse_directory(arg_target_dirname, &search_regex, recursive_flag,
+                           search_callback);
         free(arg_target_dirname);
         regfree(&search_regex);
         return EXIT_SUCCESS;

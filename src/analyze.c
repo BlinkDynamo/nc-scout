@@ -34,10 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include <getopt.h>
-#include <errno.h>
-#include <limits.h>
 
 #include "help.h"
 #include "validate.h"
@@ -54,73 +51,15 @@ static bool recursive_flag = false;
 static int matches = 0;
 static int non_matches = 0;
 
-static void analyze_directory (const char *analyze_path, const regex_t *regex)
-/**********************************************************************************************
-*
-*   Analyzes a directory given a naming convention, printing the percentages of matching files 
-*   to total files.
-**
-*   ---------------------------------------- ARGUMENTS ----------------------------------------
-*
-*   analyze_path     The directory where the analyze will take place.
-*
-*   regex            The compiled regex of the convention being analyzeed for.
-*
-**********************************************************************************************/
+static void analyze_callback (struct dirent *entry, const char *dir_path,
+                              const regex_t *regex)
 {
-    // dir_path is known to exist at this point, but opendir() can still fail from permissions.
-    DIR *current_dir = opendir(analyze_path);
-    if (current_dir == NULL) {
-        fprintf(stderr, "Error: cannot access %s due to Error %d (%s).\n", analyze_path,
-                errno, strerror(errno));
-        return;
+    (void)dir_path;
+    if (naming_match_regex(regex, entry->d_name)) {
+        matches++;
+    } else {
+        non_matches++;
     }
-   
-    // Begin reading directories/files inside current_dir.
-    struct dirent *current_file;
-    while ((current_file = readdir(current_dir)) != NULL)
-    {
-        // Skip current and parent entries.
-        if (strcmp(current_file->d_name, ".") == 0 || strcmp(current_file->d_name, "..") == 0) {
-            continue;
-        }
-
-        // Build full path for stat() fallback when d_type is DT_UNKNOWN.
-        char full_path[PATH_MAX];
-        snprintf(full_path, sizeof(full_path), "%s/%s", analyze_path, current_file->d_name);
-
-        // Determine if current entry is a directory (with fallback for DT_UNKNOWN).
-        bool is_dir = (current_file->d_type == DT_DIR) ||
-                      (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
-
-        // If the current file is a directory...
-        if (is_dir) {
-
-            // Process it.
-            if (naming_match_regex(regex, current_file->d_name)) {
-                matches++;
-            } else {
-                non_matches++;
-            }
-
-            // Then if recursive_flag is true, call analyze_directory at that location.
-            if (recursive_flag == true) {
-                analyze_directory(full_path, regex);
-            }
-        }
-        // Else if the current file is a regular file...
-        else if (current_file->d_type == DT_REG || current_file->d_type == DT_LNK ||
-                 current_file->d_type == DT_UNKNOWN) {
-
-            // Process it.
-            if (naming_match_regex(regex, current_file->d_name)) {
-                matches++;
-            } else {
-                non_matches++;
-            }
-        }
-    }
-    closedir(current_dir);
 }
 
 int subc_exec_analyze (int argc, char *argv[])
@@ -215,7 +154,8 @@ int subc_exec_analyze (int argc, char *argv[])
         (target_is_dir) &&
         (naming_compile_regex(&analyze_regex, analyze_expression)))
     {
-        analyze_directory(arg_target_dirname, &analyze_regex);
+        traverse_directory(arg_target_dirname, &analyze_regex, recursive_flag,
+                           analyze_callback);
         printf("Analyzed the presence of %s %s files and directories in '%s'.\n\n",
                 (strict_flag) ? "strictly" : "leniently",
                 arg_naming_convention,

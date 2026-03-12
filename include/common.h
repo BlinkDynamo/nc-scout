@@ -30,8 +30,18 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <stdbool.h>
+#include <dirent.h>
+#include <regex.h>
+
+typedef void (*traverse_callback)(struct dirent *entry, const char *dir_path,
+                                  const regex_t *regex);
+
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path);
 
 double percentage(int num_a, int num_b);
+
+void traverse_directory (const char *dir_path, const regex_t *regex, bool recursive,
+                         traverse_callback callback);
 
 #endif // COMMON_H
