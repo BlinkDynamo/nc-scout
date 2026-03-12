@@ -85,12 +85,22 @@ void traverse_directory (const char *dir_path, const regex_t *regex, bool recurs
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
 {
+    const char *last_slash = abs_current_path;
+
     while (*abs_initial_path && *abs_current_path && *abs_initial_path == *abs_current_path)
     {
+        if (*abs_current_path == '/') {
+            last_slash = abs_current_path;
+        }
         abs_initial_path++;
         abs_current_path++;
     }
-    // If abs_current_path starts with a '/', start the string one after that, otherwise return it unchanged.
+
+    // If paths diverged mid-component, backtrack to the last '/' boundary.
+    if (*abs_initial_path && *abs_initial_path != '/') {
+        abs_current_path = last_slash;
+    }
+
     return (*abs_current_path == '/') ? abs_current_path + 1 : abs_current_path;
 }
 
