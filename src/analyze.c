@@ -203,7 +203,7 @@ int subc_exec_analyze (int argc, char *argv[])
     char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
 
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
-    const char *analyze_expression;
+    const char *analyze_expression = NULL;
     // Set by naming_compile_regex() after analyze_expression is known to be set.
     regex_t analyze_regex;
 
