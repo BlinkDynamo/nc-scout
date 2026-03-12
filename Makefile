@@ -14,6 +14,7 @@ BUILD_DIR = build
 TESTS_DIR = $(BUILD_DIR)/tests
 SRC_DIR = src
 BIN_DIR = $(PREFIX)/bin
+MAN_DIR = $(PREFIX)/share/man/man1
 COMPLETION_DIR = /etc/bash_completion.d
 
 # Important files.
@@ -38,10 +39,12 @@ check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)
 
 install: $(EXEC)
 	install -Dm 755 $(EXEC) $(DESTDIR)$(BIN_DIR)
+	install -Dm 644 man/nc-scout.1 $(DESTDIR)$(MAN_DIR)/nc-scout.1
 	install -m 644 completions/nc-scout $(COMPLETION_DIR)/nc-scout
 
 uninstall:
 	rm -f $(DESTDIR)$(BIN_DIR)/$(notdir $(EXEC))
+	rm -f $(DESTDIR)$(MAN_DIR)/nc-scout.1
 	rm -f $(COMPLETION_DIR)/nc-scout
 
 $(EXEC): $(OBJS)

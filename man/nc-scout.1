@@ -1,0 +1,150 @@
+.TH NC-SCOUT 1 "2026-03-11" "nc-scout 0.4.0" "User Commands"
+.SH NAME
+nc-scout \- a simple naming convention tool
+.SH SYNOPSIS
+.B nc-scout
+.RI [ OPTIONS ]
+.IR COMMAND " [" "COMMAND OPTIONS" "] [" "COMMAND ARGUMENTS" ]
+.SH DESCRIPTION
+.B nc-scout
+searches directories for files and directories that match or do not match
+a given naming convention. It supports both searching for individual
+matches and analyzing the overall adherence of a directory to a convention.
+.PP
+Standalone options
+.RB ( \-\-help " and " \-\-version )
+must be the only arguments supplied. This is also the case for standalone
+options of commands (e.g.\&
+.BR "nc-scout search \-\-help" ).
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Show a help message and exit.
+.TP
+.BR \-v ", " \-\-version
+Show the version of
+.B nc-scout
+and exit.
+.SH COMMANDS
+.SS search
+.BI "nc-scout search [" OPTIONS "] [" CONVENTION "] [" LOCATION ]
+.PP
+Searches a directory for files and directories that match a naming
+convention. By default, matching entries are printed. Options must precede
+the convention and location arguments.
+.PP
+A search is only performed on the contents within the specified location.
+For example,
+.B nc-scout search pascalcase ~/Documents/
+would not output
+.IR Documents ,
+even though it is a pascalcase match.
+.TP
+.BR \-h ", " \-\-help
+Show the search help message and exit.
+.TP
+.BR \-f ", " \-\-full\-path
+Display discovered files and directories as full paths.
+.TP
+.BR \-n ", " \-\-non\-matches
+Display entries that do not match the convention instead of those that do.
+.TP
+.BR \-s ", " \-\-strict
+Enforce the naming convention strictly (see
+.BR "STRICT VS.\& LENIENT" ).
+.TP
+.BR \-R ", " \-\-recursive
+Recursively search through subdirectories.
+.SS analyze
+.BI "nc-scout analyze [" OPTIONS "] [" CONVENTION "] [" LOCATION ]
+.PP
+Displays the percentage of files and directories that follow a naming
+convention in a directory.
+.TP
+.BR \-h ", " \-\-help
+Show the analyze help message and exit.
+.TP
+.BR \-s ", " \-\-strict
+Enforce the naming convention strictly (see
+.BR "STRICT VS.\& LENIENT" ).
+.TP
+.BR \-R ", " \-\-recursive
+Analyze all subdirectories recursively.
+.SH CONVENTIONS
+The following naming conventions are supported. Each is shown with an
+example filename.
+.PP
+.TS
+tab(;);
+lb lb
+l l.
+Convention;Example
+flatcase;examplefilename.txt
+camelcase;exampleFileName.txt
+pascalcase;ExampleFileName.txt
+snakecase;example_file_name.txt
+constantcase;EXAMPLE_FILE_NAME.txt
+kebabcase;example\-file\-name.txt
+cobolcase;EXAMPLE\-FILE\-NAME.txt
+.TE
+.SH LOCATION
+The location argument accepts absolute, variable, and relative paths to
+directories.
+.PP
+.nf
+/var/lib/        Absolute path.
+~/Documents/     Variable path.
+\&../Homework/     Relative path.
+.fi
+.SH STRICT VS.\& LENIENT
+The default enforcement of naming conventions is lenient. Using the
+.B \-s
+or
+.B \-\-strict
+option enforces the convention strictly.
+.PP
+Strict enforcement means that the naming convention must be exhibited in
+its entirety. Lenient enforcement means that the name could satisfy the
+convention if more text were added, but not removed or changed.
+.PP
+.B Example:
+.I example.txt
+.TP
+.B Matches strictly:
+.BR flatcase " \- exactly matches the convention in its entirety."
+.TP
+.B Matches leniently:
+.BR kebabcase " \- could be extended to " example\-file.txt .
+.br
+.BR snakecase " \- could be extended to " example_file.txt .
+.br
+.BR camelcase " \- could be extended to " exampleFile.txt .
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+Failure (invalid arguments, missing files, permission errors, etc.).
+.SH EXAMPLES
+Search for flatcase files in the current directory:
+.PP
+.nf
+nc-scout search flatcase ./
+.fi
+.PP
+Recursively search for non-matching snakecase files, showing full paths:
+.PP
+.nf
+nc-scout search \-fnR snakecase /home/user/projects/
+.fi
+.PP
+Analyze how strictly kebabcase a directory is:
+.PP
+.nf
+nc-scout analyze \-sR kebabcase ~/Documents/
+.fi
+.SH AUTHORS
+Josh Hayden (@jhayden02) <joshhayden.business@gmail.com>
+.SH LICENSE
+zlib/libpng license. See the source distribution for the full license text.
