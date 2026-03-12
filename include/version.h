@@ -30,7 +30,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define PROGRAM_VERSION "0.3.7"
+#define PROGRAM_VERSION "0.4.0"
 #define PROGRAM_NAME "nc-scout"
 
 #endif // VERSION_H
