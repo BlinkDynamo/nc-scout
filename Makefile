@@ -14,6 +14,7 @@ BUILD_DIR = build
 TESTS_DIR = $(BUILD_DIR)/tests
 SRC_DIR = src
 BIN_DIR = $(PREFIX)/bin
+COMPLETION_DIR = /etc/bash_completion.d
 
 # Important files.
 SRCS = src/main.c src/validate.c src/naming.c src/search.c src/analyze.c src/common.c
@@ -36,11 +37,12 @@ check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)
 	$(TESTS_EXEC)
 
 install: $(EXEC)
-	install -d $(DESTDIR)$(BIN_DIR)
-	install -m 755 $(EXEC) $(DESTDIR)$(BIN_DIR)
+	install -Dm 755 $(EXEC) $(DESTDIR)$(BIN_DIR)
+	install -m 644 completions/nc-scout $(COMPLETION_DIR)/nc-scout
 
 uninstall:
 	rm -f $(DESTDIR)$(BIN_DIR)/$(notdir $(EXEC))
+	rm -f $(COMPLETION_DIR)/nc-scout
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)

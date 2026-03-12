@@ -1,0 +1,42 @@
+_nc_scout() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prev="${COMP_WORDS[COMP_CWORD-1]}"
+    local cmd=""
+    local conventions="flatcase camelcase pascalcase snakecase constantcase kebabcase cobolcase"
+
+    for word in "${COMP_WORDS[@]}"; do
+        case "$word" in
+            search|analyze) cmd="$word"; break ;;
+        esac
+    done
+
+    case "$cmd" in
+        search|analyze)
+            # Check if a convention is already in the command line
+            for word in "${COMP_WORDS[@]}"; do
+                case "$word" in
+                    flatcase|camelcase|pascalcase|snakecase|constantcase|kebabcase|cobolcase)
+                        COMPREPLY=($(compgen -d -- "$cur"))
+                        return ;;
+                esac
+            done
+
+            case "$cur" in
+                -*)
+                    local opts="--help --strict --recursive"
+                    [[ "$cmd" == "search" ]] && opts="$opts --full-path --non-matches"
+                    COMPREPLY=($(compgen -W "$opts" -- "$cur"))
+                    return ;;
+                *)
+                    COMPREPLY=($(compgen -W "$conventions" -- "$cur"))
+                    return ;;
+            esac ;;
+    esac
+
+    case "$cur" in
+        -*) COMPREPLY=($(compgen -W "--help --version" -- "$cur")) ;;
+        *)  COMPREPLY=($(compgen -W "search analyze" -- "$cur")) ;;
+    esac
+}
+
+complete -F _nc_scout nc-scout
