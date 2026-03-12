@@ -208,9 +208,11 @@ int subc_exec_analyze (int argc, char *argv[])
     // Set by naming_compile_regex() after analyze_expression is known to be set.
     regex_t analyze_regex;
 
+    bool target_is_dir = is_file_valid(arg_target_dirname) &&
+                         is_file_dir(arg_target_dirname);
+
     if ((naming_set_expression(arg_naming_convention, &analyze_expression, strict_flag)) &&
-        (is_file_valid(arg_target_dirname)) &&
-        (is_file_dir(arg_target_dirname)) &&
+        (target_is_dir) &&
         (naming_compile_regex(&analyze_regex, analyze_expression)))
     {
         analyze_directory(arg_target_dirname, &analyze_regex);
@@ -232,7 +234,7 @@ int subc_exec_analyze (int argc, char *argv[])
 
         return EXIT_SUCCESS;
     }
-    if (arg_target_dirname != NULL && !is_file_dir(arg_target_dirname)) {
+    if (arg_target_dirname != NULL && !target_is_dir) {
         fprintf(stderr, "Error: '%s' is not a directory.\n", arg_target_dirname);
     }
     free(arg_target_dirname);

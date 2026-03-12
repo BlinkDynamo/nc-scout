@@ -257,9 +257,11 @@ int subc_exec_search (int argc, char *argv[])
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;
 
+    bool target_is_dir = is_file_valid(arg_target_dirname) &&
+                         is_file_dir(arg_target_dirname);
+
     if ((naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
-        (is_file_valid(arg_target_dirname)) &&
-        (is_file_dir(arg_target_dirname)) &&
+        (target_is_dir) &&
         (naming_compile_regex(&search_regex, search_expression)))
     {
         search_directory(arg_target_dirname, &search_regex);
@@ -267,7 +269,7 @@ int subc_exec_search (int argc, char *argv[])
         regfree(&search_regex);
         return EXIT_SUCCESS;
     }
-    if (arg_target_dirname != NULL && !is_file_dir(arg_target_dirname)) {
+    if (arg_target_dirname != NULL && !target_is_dir) {
         fprintf(stderr, "Error: '%s' is not a directory.\n", arg_target_dirname);
     }
     free(arg_target_dirname);
