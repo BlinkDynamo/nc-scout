@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   version - The current version of nc-scout.  
+*   help - Help messages for nc-scout.
 *
 *   LICENSE: zlib/libpng 
 *
