@@ -37,6 +37,6 @@ bool naming_set_expression (const char *arg_naming_convention, const char **ptr_
 
 bool naming_compile_regex (regex_t *regex, const char *search_expression);
 
-bool naming_match_regex (regex_t regex, const char *filename);
+bool naming_match_regex (const regex_t *regex, const char *filename);
 
 #endif // NAMING_H

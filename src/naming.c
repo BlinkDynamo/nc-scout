@@ -157,9 +157,9 @@ bool naming_compile_regex (regex_t *regex, const char *expression)
 }
 
 // Attempts to match a regex to a filename, returning true if a match.
-bool naming_match_regex (regex_t regex, const char *filename)
+bool naming_match_regex (const regex_t *regex, const char *filename)
 {
-    int regex_return = regexec(&regex, filename, 0, NULL, 0); 
+    int regex_return = regexec(regex, filename, 0, NULL, 0);
     if (regex_return == 0) {
         return true;
     }

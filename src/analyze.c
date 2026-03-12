@@ -54,7 +54,7 @@ static bool recursive_flag = false;
 static int matches = 0;
 static int non_matches = 0;
 
-static void analyze_directory (const char *analyze_path, regex_t regex)
+static void analyze_directory (const char *analyze_path, const regex_t *regex)
 /**********************************************************************************************
 *
 *   Analyzes a directory given a naming convention, printing the percentages of matching files 
@@ -211,7 +211,7 @@ int subc_exec_analyze (int argc, char *argv[])
         (is_file_dir(arg_target_dirname)) &&
         (naming_compile_regex(&analyze_regex, analyze_expression)))
     {
-        analyze_directory(arg_target_dirname, analyze_regex);
+        analyze_directory(arg_target_dirname, &analyze_regex);
         printf("Analyzed the presence of %s %s files and directories in '%s'.\n\n",
                 (strict_flag) ? "strictly" : "leniently",
                 arg_naming_convention,

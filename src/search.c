@@ -56,7 +56,7 @@ static bool recursive_flag      = false;
 static const char *initial_search_path = NULL;
 
 static void process_current_file (struct dirent *current_file, const char *search_path,
-                           const char *initial_search_path, regex_t regex)
+                           const char *initial_search_path, const regex_t *regex)
 /**********************************************************************************************
 *
 *   Compares a d_name to a regular expression. Will print matches or non-matches depending on 
@@ -96,7 +96,7 @@ static void process_current_file (struct dirent *current_file, const char *searc
     }
 }
 
-static void search_directory (const char *search_path, regex_t regex)
+static void search_directory (const char *search_path, const regex_t *regex)
 /**********************************************************************************************
 *
 *   Searches a directory for filenames that match a regular expression.
@@ -256,7 +256,7 @@ int subc_exec_search (int argc, char *argv[])
         (is_file_dir(arg_target_dirname)) &&
         (naming_compile_regex(&search_regex, search_expression)))
     {
-        search_directory(arg_target_dirname, search_regex);
+        search_directory(arg_target_dirname, &search_regex);
         free(arg_target_dirname);
         regfree(&search_regex);
         return EXIT_SUCCESS;
