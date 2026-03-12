@@ -38,7 +38,7 @@ bool is_file_valid (const char *filepath)
 {
     // Check if canonicalize_file_name() returned NULL (file doesn't exist or path is invalid).
     if (filepath == NULL) {
-        printf("Error: file does not exist or path is invalid.\n");
+        fprintf(stderr, "Error: file does not exist or path is invalid.\n");
         return false;
     }
     return true;

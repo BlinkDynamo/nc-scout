@@ -71,8 +71,8 @@ static void analyze_directory (const char *analyze_path, const regex_t *regex)
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
     DIR *current_dir = opendir(analyze_path);
     if (current_dir == NULL) {
-        printf("Error: cannot access %s due to Error %d (%s).\n", analyze_path, errno, 
-                strerror(errno));
+        fprintf(stderr, "Error: cannot access %s due to Error %d (%s).\n", analyze_path,
+                errno, strerror(errno));
         return;
     }
    
@@ -175,7 +175,7 @@ int subc_exec_analyze (int argc, char *argv[])
                     return EXIT_SUCCESS;
                 }
                 else {
-                    printf("Incorrect usage.\nDo `nc-scout analyze --help` for more information about usage.\n");
+                    fprintf(stderr, "Incorrect usage.\nDo `nc-scout analyze --help` for more information about usage.\n");
                     return EXIT_FAILURE;
                 }
 
@@ -194,7 +194,7 @@ int subc_exec_analyze (int argc, char *argv[])
 
     int non_option_argc = argc - optind;
     if (non_option_argc < N_REQUIRED_ARGS) {
-        printf("Insufficient arguments.\nDo `nc-scout analyze --help` for more information about usage.\n");
+        fprintf(stderr, "Insufficient arguments.\nDo `nc-scout analyze --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 
@@ -231,7 +231,7 @@ int subc_exec_analyze (int argc, char *argv[])
         return EXIT_SUCCESS;
     }
     if (arg_target_dirname != NULL && !is_file_dir(arg_target_dirname)) {
-        printf("Error: '%s' is not a directory.\n", arg_target_dirname);
+        fprintf(stderr, "Error: '%s' is not a directory.\n", arg_target_dirname);
     }
     free(arg_target_dirname);
     return EXIT_FAILURE;

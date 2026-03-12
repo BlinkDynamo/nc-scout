@@ -141,7 +141,7 @@ bool naming_set_expression (const char *arg_naming_convention, const char **ptr_
             return true;
         }
     }
-    printf("Error: '%s' is not a valid naming convention\n", arg_naming_convention);
+    fprintf(stderr, "Error: '%s' is not a valid naming convention\n", arg_naming_convention);
     return false;
 }
 
@@ -152,7 +152,7 @@ bool naming_compile_regex (regex_t *regex, const char *expression)
     if (regex_return == 0) {
         return true; 
     }
-    printf("Error: Failed to compile regex.\n");
+    fprintf(stderr, "Error: Failed to compile regex.\n");
     return false;
 }
 

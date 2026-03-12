@@ -44,7 +44,7 @@ static int builtin_exec_help (int argc)
         return EXIT_SUCCESS;
     }
     else {
-        printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+        fprintf(stderr, "Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 }
@@ -57,7 +57,7 @@ static int builtin_exec_version (int argc)
         return EXIT_SUCCESS;
     }
     else {
-        printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+        fprintf(stderr, "Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 }
@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
 {   
     // Check for no supplied arguments (ie: just `nc-scout`).
     if (argc < 2) {
-        printf("No arguments supplied.\nDo `nc-scout --help` for usage information.\n");
+        fprintf(stderr, "No arguments supplied.\nDo `nc-scout --help` for usage information.\n");
         return EXIT_FAILURE;
     }
 
@@ -133,7 +133,7 @@ int main (int argc, char *argv[])
         }
     }
     // If this point is reached, no valid subcommand was found.
-    printf("Error: Unknown command `%s`.\n", argv[1]);
-    printf("Do `nc-scout --help` for usage information.\n");
+    fprintf(stderr, "Error: Unknown command `%s`.\n", argv[1]);
+    fprintf(stderr, "Do `nc-scout --help` for usage information.\n");
     return EXIT_FAILURE;
 }
