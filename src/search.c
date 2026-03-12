@@ -179,6 +179,12 @@ int subc_exec_search (int argc, char *argv[])
 *
 **********************************************************************************************/
 {
+    full_path_flag = false;
+    non_matches_flag = false;
+    strict_flag = false;
+    recursive_flag = false;
+    initial_search_path = NULL;
+
     int current_opt;
 
     while (1)
