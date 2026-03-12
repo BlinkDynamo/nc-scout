@@ -91,11 +91,6 @@ static void process_current_file (struct dirent *current_file, const char *searc
     }
 }
 
-static void search_callback (struct dirent *entry, const char *dir_path,
-                             const regex_t *regex)
-{
-    process_current_file(entry, dir_path, regex);
-}
 
 int subc_exec_search (int argc, char *argv[])
 /**********************************************************************************************
@@ -203,7 +198,7 @@ int subc_exec_search (int argc, char *argv[])
     {
         initial_search_path = arg_target_dirname;
         traverse_directory(arg_target_dirname, &search_regex, recursive_flag,
-                           search_callback);
+                           process_current_file);
         free(arg_target_dirname);
         regfree(&search_regex);
         return EXIT_SUCCESS;
