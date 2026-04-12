@@ -36,7 +36,7 @@
 *      [a-z0-9]+   'flatcase' in this example.
 *
 *   3. A non-capturing group at the end that allows for the file extention (ie foo.txt):
-*      (\\.[A-Za-z0-9]+?)
+*      (\\.[A-Za-z0-9]+)*
 *   
 *   ------------------------------- STRICT REGULAR EXPRESSIONS -------------------------------
 *
@@ -69,21 +69,21 @@
 
 #include "naming.h"
 
-#define EXPR_FLATCASE_STRICT        "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CAMELCASE_STRICT       "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_PASCALCASE_STRICT      "^\\.?([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_SNAKECASE_STRICT       "^\\.?[a-z0-9]+(_[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CONSTANTCASE_STRICT    "^\\.?[A-Z0-9]+(_[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_KEBABCASE_STRICT       "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_COBOLCASE_STRICT       "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_FLATCASE_STRICT        "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)*$"
+#define EXPR_CAMELCASE_STRICT       "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)*$"
+#define EXPR_PASCALCASE_STRICT      "^\\.?([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)*$"
+#define EXPR_SNAKECASE_STRICT       "^\\.?[a-z0-9]+(_[a-z0-9]+)+(\\.[A-Za-z0-9]+)*$"
+#define EXPR_CONSTANTCASE_STRICT    "^\\.?[A-Z0-9]+(_[A-Z0-9]+)+(\\.[A-Za-z0-9]+)*$"
+#define EXPR_KEBABCASE_STRICT       "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)*$"
+#define EXPR_COBOLCASE_STRICT       "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)*$"
 
 #define EXPR_FLATCASE_LENIENT       EXPR_FLATCASE_STRICT
-#define EXPR_CAMELCASE_LENIENT      "^\\.?[a-z]+([A-Z][a-z0-9]+)*(\\.[A-Za-z0-9]+)?$"
+#define EXPR_CAMELCASE_LENIENT      "^\\.?[a-z]+([A-Z][a-z0-9]+)*(\\.[A-Za-z0-9]+)*$"
 #define EXPR_PASCALCASE_LENIENT     EXPR_PASCALCASE_STRICT
-#define EXPR_SNAKECASE_LENIENT      "^\\.?[a-z0-9]+(_[a-z0-9]+)*(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CONSTANTCASE_LENIENT   "^\\.?[A-Z0-9]+(_[A-Z0-9]+)*(\\.[A-Za-z0-9]+)?$"
-#define EXPR_KEBABCASE_LENIENT      "^\\.?[a-z0-9]+(-[a-z0-9]+)*(\\.[A-Za-z0-9]+)?$"
-#define EXPR_COBOLCASE_LENIENT      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)*(\\.[A-Za-z0-9]+)?$"
+#define EXPR_SNAKECASE_LENIENT      "^\\.?[a-z0-9]+(_[a-z0-9]+)*(\\.[A-Za-z0-9]+)*$"
+#define EXPR_CONSTANTCASE_LENIENT   "^\\.?[A-Z0-9]+(_[A-Z0-9]+)*(\\.[A-Za-z0-9]+)*$"
+#define EXPR_KEBABCASE_LENIENT      "^\\.?[a-z0-9]+(-[a-z0-9]+)*(\\.[A-Za-z0-9]+)*$"
+#define EXPR_COBOLCASE_LENIENT      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)*(\\.[A-Za-z0-9]+)*$"
 
 static struct Convention {
     const char *name;

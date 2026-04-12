@@ -46,8 +46,8 @@ Options are command specific. To learn about the specific options available for 
 
 ### What is the Filename Body of a Filename?
 The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions.
-The final period itself and the text that follows it is what is defined as the file extention. nc-scout 
-subcommands are only performed on the filename body of a filename.
+A file extention is a period followed by alphanumeric text (e.g. `.txt`). Compound extentions such as
+`.tar.gz` are also recognized. nc-scout subcommands are only performed on the filename body of a filename.
 
 ```bash
 # Search for matches:
@@ -56,12 +56,13 @@ nc-scout search --matches snakecase ./
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is snakecase.
 example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
 .example_file.RAR       # The file extention '.RAR' is ignored, resulting in the filename body 'example_file', which is snakecase.
+example_file.tar.gz     # The file extention '.tar.gz' is ignored, resulting in the filename body 'example_file', which is snakecase.
 
 # Search for non-matches:
 nc-scout search flatcase ./
 # Output:
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is not flatcase.
-example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the filename body 'example_file.exe', which is not flatcase.
+example_File.tar.gz     # The file extention '.tar.gz' is ignored, resulting in the filename body 'example_File', which is not flatcase.
 
 ```
 
