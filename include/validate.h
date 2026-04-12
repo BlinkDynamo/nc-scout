@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   validate - nc-scout search handling, operation, and output.  
+*   validate - nctool search handling, operation, and output.  
 *
 *   LICENSE: zlib/libpng 
 *

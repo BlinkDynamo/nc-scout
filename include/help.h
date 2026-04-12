@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   help - Help messages for nc-scout.
+*   help - Help messages for nctool.
 *
 *   LICENSE: zlib/libpng 
 *
@@ -30,16 +30,16 @@
 #ifndef HELP_H
 #define HELP_H
 
-// The help message displayed for `nc-scout --help`, `nc-scout -h`, or `nc-scout help` exactly.
+// The help message displayed for `nctool --help`, `nctool -h`, or `nctool help` exactly.
 #define HELP_DEFAULT \
-"Usage: nc-scout <OPTIONS> [COMMAND] <COMMAND OPTIONS> [COMMAND ARGUMENTS]\n" \
+"Usage: nctool <OPTIONS> [COMMAND] <COMMAND OPTIONS> [COMMAND ARGUMENTS]\n" \
 "\n" \
 "To use standalone options (--help and --version), they must be the only arguments supplied.\n" \
-"This is the case for standalone options of commands as well. Example: `nc-scout [COMMAND] --help`.\n" \
+"This is the case for standalone options of commands as well. Example: `nctool [COMMAND] --help`.\n" \
 "\n" \
 "Options:\n" \
 "  -h, --help       Show this help message.\n" \
-"  -v, --version    Show the version of nc-scout you are using.\n" \
+"  -v, --version    Show the version of nctool you are using.\n" \
 "\n" \
 "Commands:\n" \
 "  search           Searches a directory for files that do not match a naming convention.\n" \
@@ -48,9 +48,9 @@
 "\n" \
 ""
 
-// The help message displayed for `nc-scout search --help`, `nc-scout search -h` exactly.
+// The help message displayed for `nctool search --help`, `nctool search -h` exactly.
 #define HELP_SEARCH \
-"Usage: nc-scout search <OPTIONS> [CONVENTION] [LOCATION]\n" \
+"Usage: nctool search <OPTIONS> [CONVENTION] [LOCATION]\n" \
 "\n" \
 "Searches a directory for files and directories that do not match a naming convention.\n" \
 "\n" \
@@ -76,7 +76,7 @@
 "  ../Homework/     Relative paths to directories.\n" \
 "\n" \
 "  It should be noted that a search will only be done on contents within a specified location.\n" \
-"  A command such as `nc-scout search pascalcase ~/Documents/` would not output 'Documents',\n" \
+"  A command such as `nctool search pascalcase ~/Documents/` would not output 'Documents',\n" \
 "  even though 'Documents' is a pascalcase match.\n" \
 "\n" \
 "Strict vs. Lenient:\n" \
@@ -100,9 +100,9 @@
 "\n" \
 ""
 
-// The help message displayed for `nc-scout analyze --help`, `nc-scout analyze -h` exactly.
+// The help message displayed for `nctool analyze --help`, `nctool analyze -h` exactly.
 #define HELP_ANALYZE \
-"Usage: nc-scout analyze <OPTIONS> [CONVENTION] [LOCATION]\n" \
+"Usage: nctool analyze <OPTIONS> [CONVENTION] [LOCATION]\n" \
 "\n" \
 "Displays the percentage of files that follow a naming convention in a directory.\n" \
 "\n" \

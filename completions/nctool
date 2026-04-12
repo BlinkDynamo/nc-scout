@@ -1,4 +1,4 @@
-_nc_scout() {
+_nctool() {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local prev="${COMP_WORDS[COMP_CWORD-1]}"
     local cmd=""
@@ -39,4 +39,4 @@ _nc_scout() {
     esac
 }
 
-complete -F _nc_scout nc-scout
+complete -F _nctool nctool

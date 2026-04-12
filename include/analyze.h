@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   analyze - nc-scout analyze handling, operation, and output. 
+*   analyze - nctool analyze handling, operation, and output. 
 *
 *   LICENSE: zlib/libpng 
 *

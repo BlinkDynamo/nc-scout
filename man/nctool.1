@@ -1,12 +1,12 @@
-.TH NC-SCOUT 1 "2026-03-11" "nc-scout 0.4.0" "User Commands"
+.TH NCTOOL 1 "2026-03-11" "nctool 0.4.0" "User Commands"
 .SH NAME
-nc-scout \- a simple naming convention tool
+nctool \- a simple naming convention tool
 .SH SYNOPSIS
-.B nc-scout
+.B nctool
 .RI [ OPTIONS ]
 .IR COMMAND " [" "COMMAND OPTIONS" "] [" "COMMAND ARGUMENTS" ]
 .SH DESCRIPTION
-.B nc-scout
+.B nctool
 searches directories for files and directories that match or do not match
 a given naming convention. It supports both searching for individual
 matches and analyzing the overall adherence of a directory to a convention.
@@ -15,7 +15,7 @@ Standalone options
 .RB ( \-\-help " and " \-\-version )
 must be the only arguments supplied. This is also the case for standalone
 options of commands (e.g.\&
-.BR "nc-scout search \-\-help" ).
+.BR "nctool search \-\-help" ).
 .SH OPTIONS
 .TP
 .BR \-h ", " \-\-help
@@ -23,11 +23,11 @@ Show a help message and exit.
 .TP
 .BR \-v ", " \-\-version
 Show the version of
-.B nc-scout
+.B nctool
 and exit.
 .SH COMMANDS
 .SS search
-.BI "nc-scout search [" OPTIONS "] [" CONVENTION "] [" LOCATION ]
+.BI "nctool search [" OPTIONS "] [" CONVENTION "] [" LOCATION ]
 .PP
 Searches a directory for files and directories that match a naming
 convention. By default, matching entries are printed. Options must precede
@@ -35,7 +35,7 @@ the convention and location arguments.
 .PP
 A search is only performed on the contents within the specified location.
 For example,
-.B nc-scout search pascalcase ~/Documents/
+.B nctool search pascalcase ~/Documents/
 would not output
 .IR Documents ,
 even though it is a pascalcase match.
@@ -56,7 +56,7 @@ Enforce the naming convention strictly (see
 .BR \-R ", " \-\-recursive
 Recursively search through subdirectories.
 .SS analyze
-.BI "nc-scout analyze [" OPTIONS "] [" CONVENTION "] [" LOCATION ]
+.BI "nctool analyze [" OPTIONS "] [" CONVENTION "] [" LOCATION ]
 .PP
 Displays the percentage of files and directories that follow a naming
 convention in a directory.
@@ -130,19 +130,19 @@ Failure (invalid arguments, missing files, permission errors, etc.).
 Search for flatcase files in the current directory:
 .PP
 .nf
-nc-scout search flatcase ./
+nctool search flatcase ./
 .fi
 .PP
 Recursively search for non-matching snakecase files, showing full paths:
 .PP
 .nf
-nc-scout search \-fnR snakecase /home/user/projects/
+nctool search \-fnR snakecase /home/user/projects/
 .fi
 .PP
 Analyze how strictly kebabcase a directory is:
 .PP
 .nf
-nc-scout analyze \-sR kebabcase ~/Documents/
+nctool analyze \-sR kebabcase ~/Documents/
 .fi
 .SH AUTHORS
 Josh Hayden (@jhayden02) <joshhayden.business@gmail.com>

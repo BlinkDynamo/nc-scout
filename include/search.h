@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   search - nc-scout search handling, operation, and output. 
+*   search - nctool search handling, operation, and output. 
 *
 *   LICENSE: zlib/libpng 
 *

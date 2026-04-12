@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   search - Handles options, validation, and runtime of the nc-scout search subcommand.
+*   search - Handles options, validation, and runtime of the nctool search subcommand.
 *
 *   LICENSE: zlib/libpng
 *
@@ -102,7 +102,7 @@ int subc_exec_search (int argc, char *argv[])
 *
 *   argc    The argc of main() in src/main.c with 1 removed.
 *
-*   argv    The argv of main() in src/main.c with "nc-scout" removed from the beginning.
+*   argv    The argv of main() in src/main.c with "nctool" removed from the beginning.
 *
 *   ----------------------------------------- RETURNS -----------------------------------------
 *
@@ -150,7 +150,7 @@ int subc_exec_search (int argc, char *argv[])
                     return EXIT_SUCCESS;
                 }
                 else {
-                    fprintf(stderr, "Incorrect usage.\nDo `nc-scout search --help` for more information about usage.\n");
+                    fprintf(stderr, "Incorrect usage.\nDo `nctool search --help` for more information about usage.\n");
                     return EXIT_FAILURE;
                 }
 
@@ -177,7 +177,7 @@ int subc_exec_search (int argc, char *argv[])
 
     int non_option_argc = argc - optind;
     if (non_option_argc < N_REQUIRED_ARGS) {
-        fprintf(stderr, "Insufficient arguments.\nDo `nc-scout search --help` for more information about usage.\n");
+        fprintf(stderr, "Insufficient arguments.\nDo `nctool search --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 

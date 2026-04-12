@@ -27,16 +27,16 @@ jobs:
             - name: Package binary
               run: |
                   version="${GITHUB_REF_NAME}"
-                  mkdir -p "nc-scout_${version}"
-                  cp build/nc-scout "nc-scout_${version}/"
-                  cp LICENSE "nc-scout_${version}/" 2>/dev/null || true
-                  cp README.md "nc-scout_${version}/" 2>/dev/null || true
-                  cp -r completions "nc-scout_${version}/" 2>/dev/null || true
-                  tar czf "nc-scout_${version}_linux_x86_64.tar.gz" "nc-scout_${version}"
+                  mkdir -p "nctool_${version}"
+                  cp build/nctool "nctool_${version}/"
+                  cp LICENSE "nctool_${version}/" 2>/dev/null || true
+                  cp README.md "nctool_${version}/" 2>/dev/null || true
+                  cp -r completions "nctool_${version}/" 2>/dev/null || true
+                  tar czf "nctool_${version}_linux_x86_64.tar.gz" "nctool_${version}"
 
             - name: Create GitHub release
               uses: softprops/action-gh-release@v2
               with:
-                  name: nc-scout ${{ github.ref_name }}
-                  files: nc-scout_*_linux_x86_64.tar.gz
+                  name: nctool ${{ github.ref_name }}
+                  files: nctool_*_linux_x86_64.tar.gz
                   generate_release_notes: true

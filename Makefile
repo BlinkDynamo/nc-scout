@@ -20,7 +20,7 @@ COMPLETION_DIR = /etc/bash_completion.d
 # Important files.
 SRCS = src/main.c src/validate.c src/naming.c src/search.c src/analyze.c src/common.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
-EXEC = $(BUILD_DIR)/nc-scout
+EXEC = $(BUILD_DIR)/nctool
 TESTS_EXEC = tests/init.sh && tests/build.sh && tests/check.sh
 
 # Exports. Used by scripts in tests/.
@@ -39,13 +39,13 @@ check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)
 
 install: $(EXEC)
 	install -Dm 755 $(EXEC) $(DESTDIR)$(BIN_DIR)
-	install -Dm 644 man/nc-scout.1 $(DESTDIR)$(MAN_DIR)/nc-scout.1
-	install -m 644 completions/nc-scout $(COMPLETION_DIR)/nc-scout
+	install -Dm 644 man/nctool.1 $(DESTDIR)$(MAN_DIR)/nctool.1
+	install -m 644 completions/nctool $(COMPLETION_DIR)/nctool
 
 uninstall:
 	rm -f $(DESTDIR)$(BIN_DIR)/$(notdir $(EXEC))
-	rm -f $(DESTDIR)$(MAN_DIR)/nc-scout.1
-	rm -f $(COMPLETION_DIR)/nc-scout
+	rm -f $(DESTDIR)$(MAN_DIR)/nctool.1
+	rm -f $(COMPLETION_DIR)/nctool
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)

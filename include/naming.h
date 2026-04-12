@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   naming - naming comparison for nc-scout. 
+*   naming - naming comparison for nctool. 
 *
 *   LICENSE: zlib/libpng 
 *

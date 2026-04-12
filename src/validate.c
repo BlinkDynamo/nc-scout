@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   validate - nc-scout cli input validation and prompting. 
+*   validate - nctool cli input validation and prompting. 
 *
 *   LICENSE: zlib/libpng 
 *

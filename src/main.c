@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   nc-scout - A simple naming convention tool.
+*   nctool - A simple naming convention tool.
 *
 *   LICENSE: zlib/libpng 
 *
@@ -38,26 +38,26 @@
 
 static int builtin_exec_help (int argc)
 {
-    // Input must be either nc-scout -h or nc-scout --help exactly.
+    // Input must be either nctool -h or nctool --help exactly.
     if (argc == 2) {
         printf("%s", HELP_DEFAULT);
         return EXIT_SUCCESS;
     }
     else {
-        fprintf(stderr, "Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+        fprintf(stderr, "Incorrect usage.\nDo `nctool --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 }
 
 static int builtin_exec_version (int argc)
 {   
-    // Input must be either nc-scout -v or nc-scout --version exactly.
+    // Input must be either nctool -v or nctool --version exactly.
     if (argc == 2) {
         printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
         return EXIT_SUCCESS;
     }
     else {
-        fprintf(stderr, "Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+        fprintf(stderr, "Incorrect usage.\nDo `nctool --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 }
@@ -65,7 +65,7 @@ static int builtin_exec_version (int argc)
 int main (int argc, char *argv[]) 
 /**********************************************************************************************
 *
-*   The entry point of nc-scout.
+*   The entry point of nctool.
 *
 *   ---------------------------------------- ARGUMENTS ----------------------------------------
 *
@@ -81,9 +81,9 @@ int main (int argc, char *argv[])
 *
 **********************************************************************************************/
 {   
-    // Check for no supplied arguments (ie: just `nc-scout`).
+    // Check for no supplied arguments (ie: just `nctool`).
     if (argc < 2) {
-        fprintf(stderr, "No arguments supplied.\nDo `nc-scout --help` for usage information.\n");
+        fprintf(stderr, "No arguments supplied.\nDo `nctool --help` for usage information.\n");
         return EXIT_FAILURE;
     }
 
@@ -128,12 +128,12 @@ int main (int argc, char *argv[])
     for (int i = 0; i < n_subcommands; i++)
     {
         if (strcmp(argv[1], Subcommands[i].name) == 0) {
-            // -1 and 1 to strip "nc-scout" from the input.
+            // -1 and 1 to strip "nctool" from the input.
             return Subcommands[i].execute(argc - 1, &argv[1]);
         }
     }
     // If this point is reached, no valid subcommand was found.
     fprintf(stderr, "Error: Unknown command `%s`.\n", argv[1]);
-    fprintf(stderr, "Do `nc-scout --help` for usage information.\n");
+    fprintf(stderr, "Do `nctool --help` for usage information.\n");
     return EXIT_FAILURE;
 }

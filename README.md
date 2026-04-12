@@ -1,4 +1,4 @@
-# ![nc-scout](img/nc-scout.png)
+# ![nctool](img/nctool.png)
 
 ## Index
 * [Description](#description)
@@ -8,8 +8,7 @@
 * [Installation](#installation)
 
 ## Description
-nc-scout is a simple naming convention checker tool. It is intended to help you enforce naming 
-conventions on directory structures. 
+A tool for working with file naming conventions.
 
 ## Dependencies
 * make
@@ -19,14 +18,6 @@ conventions on directory structures.
 * grep (for the test suite).
 
 ## Usage
-The layout of a nc-scout command.
-
-nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
-
-### Options
-Options are command specific. To learn about the specific options available for a command, use 
-`nc-scout [COMMAND] --help`
-
 ### Commands
 |Command        | Description                                                                      |
 |---------------|----------------------------------------------------------------------------------|
@@ -47,11 +38,11 @@ Options are command specific. To learn about the specific options available for 
 ### What is the Filename Body of a Filename?
 The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions.
 A file extention is a period followed by alphanumeric text (e.g. `.txt`). Compound extentions such as
-`.tar.gz` are also recognized. nc-scout subcommands are only performed on the filename body of a filename.
+`.tar.gz` are also recognized. nctool subcommands are only performed on the filename body of a filename.
 
 ```bash
 # Search for matches:
-nc-scout search --matches snakecase ./
+nctool search --matches snakecase ./
 # Output:
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is snakecase.
 example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
@@ -59,7 +50,7 @@ example_file.txt        # The file extention '.txt' is ignored, resulting in the
 example_file.tar.gz     # The file extention '.tar.gz' is ignored, resulting in the filename body 'example_file', which is snakecase.
 
 # Search for non-matches:
-nc-scout search flatcase ./
+nctool search flatcase ./
 # Output:
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is not flatcase.
 example_File.tar.gz     # The file extention '.tar.gz' is ignored, resulting in the filename body 'example_File', which is not flatcase.
@@ -87,8 +78,8 @@ Lenient matches:
 ## Build Instructions
 To begin, clone the project and go to the root of the repository:
 ```bash
-git clone https://github.com/BlinkDynamo/nc-scout.git nc-scout
-cd nc-scout/
+git clone https://github.com/BlinkDynamo/nctool.git nctool
+cd nctool/
 ```
 
 Build the binary:
@@ -108,14 +99,14 @@ To use the binary directly:
 ```bash
 cd build/
 # called directly from the build directory.
-./nc-scout --help
+./nctool --help
 ```
 
 To install the binary and use it systemwide:
 ```bash
 sudo make install
 # now installed in /usr/local/bin/
-nc-scout --help
+nctool --help
 ```
 
 Should you want to clean the build/ and tests/ directories:
@@ -126,5 +117,5 @@ make clean
 To uninstall the binary:
 ```bash
 sudo make uninstall
-# rm -f /usr/local/bin/nc-scout
+# rm -f /usr/local/bin/nctool
 ```

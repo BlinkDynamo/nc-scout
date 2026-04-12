@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   version - The current version of nc-scout.  
+*   version - The current version of nctool.  
 *
 *   LICENSE: zlib/libpng 
 *
@@ -31,6 +31,6 @@
 #define VERSION_H
 
 #define PROGRAM_VERSION "0.4.0"
-#define PROGRAM_NAME "nc-scout"
+#define PROGRAM_NAME "nctool"
 
 #endif // VERSION_H
