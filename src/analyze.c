@@ -44,7 +44,7 @@
 #define N_REQUIRED_ARGS 2
 
 // Flags.
-static bool strict_flag    = false;
+static bool strict_flag = false;
 static bool recursive_flag = false;
 
 static int matches = 0;
@@ -90,7 +90,7 @@ int subc_exec_analyze (int argc, char *argv[])
     while (1)
     {
         static struct option long_options_analyze[] =
-        {
+		{
             {"help", no_argument, 0, 'h'},
             {"strict", no_argument, 0, 's'},
             {"recursive", no_argument, 0, 'R'},
@@ -147,27 +147,29 @@ int subc_exec_analyze (int argc, char *argv[])
     // Set by naming_compile_regex() after analyze_expression is known to be set.
     regex_t analyze_regex;
 
-    bool target_is_dir = is_file_valid(arg_target_dirname) &&
-                         is_file_dir(arg_target_dirname);
+    bool target_is_dir = is_file_valid(arg_target_dirname) && is_file_dir(arg_target_dirname);
 
     if ((naming_set_expression(arg_naming_convention, &analyze_expression, strict_flag)) &&
         (target_is_dir) &&
         (naming_compile_regex(&analyze_regex, analyze_expression)))
     {
-        traverse_directory(arg_target_dirname, &analyze_regex, recursive_flag,
-                           analyze_callback);
-        printf("Analyzed the presence of %s %s files and directories in '%s'.\n\n",
-                (strict_flag) ? "strictly" : "leniently",
-                arg_naming_convention,
-                arg_target_dirname);
+        traverse_directory(arg_target_dirname, &analyze_regex, recursive_flag, analyze_callback);
+        printf(
+			"Analyzed the presence of %s %s files and directories in '%s'.\n\n",
+            (strict_flag) ? "strictly" : "leniently",
+            arg_naming_convention,
+            arg_target_dirname
+		);
 
         printf("%s:         %d\n", arg_naming_convention, matches);
         printf("non-%s:     %d\n\n", arg_naming_convention, non_matches);
-        printf("%s %s files and directories make up %0.3f%% of '%s'.\n",
-                (strict_flag) ? "strictly" : "leniently",
-                arg_naming_convention,
-                percentage(matches, matches + non_matches),
-                arg_target_dirname);
+        printf(
+			"%s %s files and directories make up %0.3f%% of '%s'.\n",
+            (strict_flag) ? "strictly" : "leniently",
+            arg_naming_convention,
+            percentage(matches, matches + non_matches),
+            arg_target_dirname
+		);
 
         free(arg_target_dirname);
         regfree(&analyze_regex);

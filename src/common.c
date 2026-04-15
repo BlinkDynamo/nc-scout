@@ -46,26 +46,26 @@ void traverse_directory (const char *dir_path, const regex_t *regex, bool recurs
 {
     DIR *current_dir = opendir(dir_path);
     if (current_dir == NULL) {
-        fprintf(stderr, "Error: cannot access %s due to Error %d (%s).\n",
-                dir_path, errno, strerror(errno));
+        fprintf(
+			stderr,
+			"Error: cannot access %s due to Error %d (%s).\n",
+            dir_path, errno, strerror(errno)
+		);
         return;
     }
 
     struct dirent *current_file;
     while ((current_file = readdir(current_dir)) != NULL)
     {
-        if (strcmp(current_file->d_name, ".") == 0 ||
-            strcmp(current_file->d_name, "..") == 0) {
+        if (strcmp(current_file->d_name, ".") == 0 || strcmp(current_file->d_name, "..") == 0) {
             continue;
         }
 
         char full_path[PATH_MAX];
-        snprintf(full_path, sizeof(full_path), "%s/%s",
-                 dir_path, current_file->d_name);
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, current_file->d_name);
 
         bool is_dir = (current_file->d_type == DT_DIR) ||
-                      (current_file->d_type == DT_UNKNOWN &&
-                       is_file_dir(full_path));
+                      (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
 
         if (is_dir) {
             callback(current_file, dir_path, regex);
