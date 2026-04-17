@@ -31,6 +31,8 @@
 #define _GNU_SOURCE
 #endif // _GNU_SOURCE
 
+#include <errno.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -41,24 +43,57 @@
 #include "naming.h"
 #include "analyze.h"
 
-#define N_REQUIRED_ARGS 2
+#define N_REQUIRED_ARGS 1
 
 // Flags.
 static bool strict_flag = false;
 static bool recursive_flag = false;
 
-static int matches = 0;
-static int non_matches = 0;
-
-static void analyze_callback (struct dirent *entry, const char *dir_path,
-                              const regex_t *regex)
-{
-    (void)dir_path;
-    if (naming_match_regex(regex, entry->d_name)) {
-        matches++;
-    } else {
-        non_matches++;
+void analyze (const char *dir_path, int *matches, const regex_t *regexes, bool recursive)
+{	
+    DIR *current_dir = opendir(dir_path);
+    if (current_dir == NULL) {
+        fprintf(
+			stderr,
+			"Error: cannot access %s due to Error %d (%s).\n",
+            dir_path, errno, strerror(errno)
+		);
+        return;
     }
+
+    struct dirent *current_file;
+    while ((current_file = readdir(current_dir)) != NULL)
+    {
+        if (strcmp(current_file->d_name, ".") == 0 || strcmp(current_file->d_name, "..") == 0) {
+            continue;
+        }
+
+        char full_path[PATH_MAX];
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, current_file->d_name);
+
+        bool is_dir = (current_file->d_type == DT_DIR) ||
+                      (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
+
+		int file_conventions = 0;
+		for (int i = 0; i < n_members_in_Conventions; i++) {
+			if (regexec(&regexes[i], current_file->d_name, 0, NULL, 0) == 0) {
+				matches[i]++;
+				file_conventions++;
+			}
+		}
+		// Increment total.
+		matches[n_members_in_Conventions]++;
+
+		// Increment other.
+		if (file_conventions == 0) {
+			matches[n_members_in_Conventions + 1]++;
+		}
+
+        if (is_dir && recursive) {
+            analyze(full_path, matches, regexes, recursive);
+        } 
+    }
+    closedir(current_dir);
 }
 
 int subc_exec_analyze (int argc, char *argv[])
@@ -79,8 +114,6 @@ int subc_exec_analyze (int argc, char *argv[])
 *
 **********************************************************************************************/
 {
-    matches = 0;
-    non_matches = 0;
     strict_flag = false;
     recursive_flag = false;
     optind = 1;
@@ -139,46 +172,51 @@ int subc_exec_analyze (int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    const char *arg_naming_convention = argv[optind];
-    char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
-
-    // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
-    const char *analyze_expression = NULL;
-    // Set by naming_compile_regex() after analyze_expression is known to be set.
-    regex_t analyze_regex;
-
+    char *arg_target_dirname = canonicalize_file_name(argv[optind]);
     bool target_is_dir = is_file_valid(arg_target_dirname) && is_file_dir(arg_target_dirname);
-
-    if ((naming_set_expression(arg_naming_convention, &analyze_expression, strict_flag)) &&
-        (target_is_dir) &&
-        (naming_compile_regex(&analyze_regex, analyze_expression)))
-    {
-        traverse_directory(arg_target_dirname, &analyze_regex, recursive_flag, analyze_callback);
-        printf(
-			"Analyzed the presence of %s %s files and directories in '%s'.\n\n",
-            (strict_flag) ? "strictly" : "leniently",
-            arg_naming_convention,
-            arg_target_dirname
-		);
-
-        printf("%s:         %d\n", arg_naming_convention, matches);
-        printf("non-%s:     %d\n\n", arg_naming_convention, non_matches);
-        printf(
-			"%s %s files and directories make up %0.3f%% of '%s'.\n",
-            (strict_flag) ? "strictly" : "leniently",
-            arg_naming_convention,
-            percentage(matches, matches + non_matches),
-            arg_target_dirname
-		);
-
-        free(arg_target_dirname);
-        regfree(&analyze_regex);
-
-        return EXIT_SUCCESS;
-    }
-    if (arg_target_dirname != NULL && !target_is_dir) {
+	if (arg_target_dirname != NULL && !target_is_dir) {
         fprintf(stderr, "Error: '%s' is not a directory.\n", arg_target_dirname);
+		return EXIT_FAILURE;
     }
-    free(arg_target_dirname);
-    return EXIT_FAILURE;
+
+    regex_t regexes[n_members_in_Conventions];
+	for (int i = 0; i < n_members_in_Conventions; i++) {
+		const char *expression;
+		if (strict_flag) {
+			expression = Conventions[i].expr_strict;
+		} else {
+			expression = Conventions[i].expr_lenient;
+		}
+		regcomp(&regexes[i], expression, REG_EXTENDED);
+	}
+
+	// The number of matching files for each convention in 'Conventions'. The last index is the
+	// total number of files.
+	int matches[n_members_in_Conventions + 2];
+	memset(matches, 0, sizeof(matches));
+
+	analyze(arg_target_dirname, matches, regexes, recursive_flag);
+
+	// Free all allocated sections.
+	free(arg_target_dirname);
+	for (int i = 0; i < n_members_in_Conventions; i++) {	
+		regfree(&regexes[i]);
+	}
+	
+	// Print the formatted output.
+	const int total_padding = 20;
+	const int number_padding = 7;
+
+	const int total_files = matches[n_members_in_Conventions];
+	int other_files = matches[n_members_in_Conventions + 1];
+	for (int i = 0; i < n_members_in_Conventions; i++) {	
+		const char *convention_name = Conventions[i].name;
+		const int convention_matches = matches[i];
+
+		printf("%-*s %*d\n", total_padding, convention_name, number_padding, convention_matches);
+	}
+	printf("%-*s %*d\n\n", total_padding, "other", number_padding, other_files);
+	printf("%-*s %*d\n", total_padding, "total", number_padding, total_files);
+
+	return EXIT_SUCCESS; 
 }

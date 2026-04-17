@@ -85,11 +85,7 @@
 #define EXPR_KEBABCASE_LENIENT      "^\\.?[a-z0-9]+(-[a-z0-9]+)*(\\.[A-Za-z0-9]+)*$"
 #define EXPR_COBOLCASE_LENIENT      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)*(\\.[A-Za-z0-9]+)*$"
 
-static struct Convention {
-    const char *name;
-    const char *expr_strict;
-    const char *expr_lenient;
-} Conventions[] = {
+Convention Conventions[] = {
     {"flatcase", EXPR_FLATCASE_STRICT, EXPR_FLATCASE_LENIENT}, 
     {"camelcase", EXPR_CAMELCASE_STRICT, EXPR_CAMELCASE_LENIENT},
     {"pascalcase", EXPR_PASCALCASE_STRICT, EXPR_PASCALCASE_LENIENT},
@@ -99,7 +95,7 @@ static struct Convention {
     {"cobolcase", EXPR_COBOLCASE_STRICT, EXPR_COBOLCASE_LENIENT},
 };
 
-static const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(struct Convention));
+const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(Convention));
 
 bool naming_set_expression (const char *arg_naming_convention, const char **ptr_search_expression, 
                             bool strict_flag)

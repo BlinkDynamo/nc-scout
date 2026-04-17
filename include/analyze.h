@@ -30,6 +30,8 @@
 #ifndef ANALYZE_H
 #define ANALYZE_H
 
+void analyze (const char *dir_path, int *matches, const regex_t *regexes, bool recursive);
+
 int subc_exec_analyze (int argc, char *argv[]);
 
 #endif // ANALYZE_H

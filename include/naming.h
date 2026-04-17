@@ -33,6 +33,15 @@
 #include <stdbool.h>
 #include <regex.h>
 
+typedef struct {
+    const char *name;
+    const char *expr_strict;
+    const char *expr_lenient;
+} Convention;
+
+extern Convention Conventions[];
+extern const int n_members_in_Conventions;
+
 bool naming_set_expression (const char *arg_naming_convention, const char **ptr_search_expression, bool strict_flag);
 
 bool naming_compile_regex (regex_t *regex, const char *search_expression);

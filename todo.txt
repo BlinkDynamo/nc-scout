@@ -1,1 +1,0 @@
-Switch analyze from doing a specific convention to doing all of them at once, then displaying each's percentage presence, sorted from most to least.
