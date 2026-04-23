@@ -184,7 +184,7 @@ int subc_exec_search (int argc, char *argv[])
     const char *arg_naming_convention = argv[optind];
     char *arg_target_dirname = canonicalize_file_name(argv[optind + 1]);
 
-    // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
+    // Set to conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     const char *search_expression = NULL;
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;

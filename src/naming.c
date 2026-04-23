@@ -85,7 +85,7 @@
 #define EXPR_KEBABCASE_LENIENT      "^\\.?[a-z0-9]+(-[a-z0-9]+)*(\\.[A-Za-z0-9]+)*$"
 #define EXPR_COBOLCASE_LENIENT      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)*(\\.[A-Za-z0-9]+)*$"
 
-Convention Conventions[] = {
+convention conventions[] = {
     {"flatcase", EXPR_FLATCASE_STRICT, EXPR_FLATCASE_LENIENT}, 
     {"camelcase", EXPR_CAMELCASE_STRICT, EXPR_CAMELCASE_LENIENT},
     {"pascalcase", EXPR_PASCALCASE_STRICT, EXPR_PASCALCASE_LENIENT},
@@ -95,25 +95,25 @@ Convention Conventions[] = {
     {"cobolcase", EXPR_COBOLCASE_STRICT, EXPR_COBOLCASE_LENIENT},
 };
 
-const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(Convention));
+const int n_members_in_conventions = (sizeof(conventions) / sizeof(convention));
 
 bool naming_set_expression (const char *arg_naming_convention, const char **ptr_search_expression, 
                             bool strict_flag)
 /**********************************************************************************************
 *
-*   Attempts to match arg_naming_convention against every Conventions[i].name in Conventions[].
+*   Attempts to match arg_naming_convention against every conventions[i].name in conventions[].
 *   If a match is found, dereference the pointer ptr_search_expression points to, set it to
-*   Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
-*   to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
+*   conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
+*   to conventions[i].expr_strict. Return true. If no match is found, return false and keep 
 *   search_expression NULL.
 *
 *   ---------------------------------------- ARGUMENTS ----------------------------------------
 *
-*   arg_naming_convention   The naming convention already verified to exist in Conventions[].
+*   arg_naming_convention   The naming convention already verified to exist in conventions[].
 *
 *   ptr_search_expression   Pointer to an unset search expression. Sets it to the expression
-*                           naming convention arg_naming_convention matches in Conventions[].
-*                           If arg_naming_convention matches nothing in Conventions[], it 
+*                           naming convention arg_naming_convention matches in conventions[].
+*                           If arg_naming_convention matches nothing in conventions[], it 
 *                           remains NULL.
 *
 *   strict_flag             Determines whether ptr_search_expression will be set to a leninent
@@ -125,14 +125,14 @@ bool naming_set_expression (const char *arg_naming_convention, const char **ptr_
 *
 **********************************************************************************************/
 {
-    for (int i = 0; i < n_members_in_Conventions; i++) 
+    for (int i = 0; i < n_members_in_conventions; i++) 
     {
-        if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
+        if (strcmp(arg_naming_convention, conventions[i].name) == 0) {
             if (strict_flag == true) {
-                *ptr_search_expression = Conventions[i].expr_strict;
+                *ptr_search_expression = conventions[i].expr_strict;
             }
             else {
-                *ptr_search_expression = Conventions[i].expr_lenient;
+                *ptr_search_expression = conventions[i].expr_lenient;
             }
             return true;
         }

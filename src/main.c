@@ -87,19 +87,19 @@ int main (int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    struct Builtin 
+    struct builtin 
     {   
         const char *name;
         int (*execute)(int argc); // Pointer to the function that executes a builtin.
     };
 
-    struct Subcommand 
+    struct subcommand 
     {   
         const char *name;
         int (*execute)(int argc, char *argv[]); // Pointer to the function that executes a subcommand.
     };
    
-    struct Builtin Builtins[] = 
+    struct builtin builtins[] = 
     {
         {"--help", builtin_exec_help},
         {"-h", builtin_exec_help},
@@ -107,29 +107,29 @@ int main (int argc, char *argv[])
         {"-v", builtin_exec_version},
     };
 
-    struct Subcommand Subcommands[] = 
+    struct subcommand subcommands[] = 
     {
         {"search", subc_exec_search},
         {"analyze", subc_exec_analyze}
     };
 
-    // Get the number of Builtins and Subcommands.
-    const int n_builtins = sizeof(Builtins) / sizeof(Builtins[0]);
-    const int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
+    // Get the number of builtins and subcommands.
+    const int n_builtins = sizeof(builtins) / sizeof(builtins[0]);
+    const int n_subcommands = sizeof(subcommands) / sizeof(subcommands[0]);
 
-    // Iterate through Builtins and Subcommands, looking for names that match argv[1].
-    // Search through Builtins first, then Subcommands. Execute the first match that is found.
+    // Iterate through builtins and subcommands, looking for names that match argv[1].
+    // Search through builtins first, then subcommands. Execute the first match that is found.
     for (int i = 0; i < n_builtins; i++)
     {
-        if (strcmp(argv[1], Builtins[i].name) == 0) {
-            return Builtins[i].execute(argc);
+        if (strcmp(argv[1], builtins[i].name) == 0) {
+            return builtins[i].execute(argc);
         }
     }
     for (int i = 0; i < n_subcommands; i++)
     {
-        if (strcmp(argv[1], Subcommands[i].name) == 0) {
+        if (strcmp(argv[1], subcommands[i].name) == 0) {
             // -1 and 1 to strip "nctool" from the input.
-            return Subcommands[i].execute(argc - 1, &argv[1]);
+            return subcommands[i].execute(argc - 1, &argv[1]);
         }
     }
     // If this point is reached, no valid subcommand was found.

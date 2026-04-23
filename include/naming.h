@@ -37,10 +37,10 @@ typedef struct {
     const char *name;
     const char *expr_strict;
     const char *expr_lenient;
-} Convention;
+} convention;
 
-extern Convention Conventions[];
-extern const int n_members_in_Conventions;
+extern convention conventions[];
+extern const int n_members_in_conventions;
 
 bool naming_set_expression (const char *arg_naming_convention, const char **ptr_search_expression, bool strict_flag);
 

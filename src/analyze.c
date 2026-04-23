@@ -75,18 +75,18 @@ void analyze (const char *dir_path, int *matches, const regex_t *regexes, bool r
                       (current_file->d_type == DT_UNKNOWN && is_file_dir(full_path));
 
 		int file_conventions = 0;
-		for (int i = 0; i < n_members_in_Conventions; i++) {
+		for (int i = 0; i < n_members_in_conventions; i++) {
 			if (regexec(&regexes[i], current_file->d_name, 0, NULL, 0) == 0) {
 				matches[i]++;
 				file_conventions++;
 			}
 		}
 		// Increment total.
-		matches[n_members_in_Conventions]++;
+		matches[n_members_in_conventions]++;
 
 		// Increment other.
 		if (file_conventions == 0) {
-			matches[n_members_in_Conventions + 1]++;
+			matches[n_members_in_conventions + 1]++;
 		}
 
         if (is_dir && recursive) {
@@ -179,27 +179,27 @@ int subc_exec_analyze (int argc, char *argv[])
 		return EXIT_FAILURE;
     }
 
-    regex_t regexes[n_members_in_Conventions];
-	for (int i = 0; i < n_members_in_Conventions; i++) {
+    regex_t regexes[n_members_in_conventions];
+	for (int i = 0; i < n_members_in_conventions; i++) {
 		const char *expression;
 		if (strict_flag) {
-			expression = Conventions[i].expr_strict;
+			expression = conventions[i].expr_strict;
 		} else {
-			expression = Conventions[i].expr_lenient;
+			expression = conventions[i].expr_lenient;
 		}
 		regcomp(&regexes[i], expression, REG_EXTENDED);
 	}
 
-	// The number of matching files for each convention in 'Conventions'. The last index is the
+	// The number of matching files for each convention in 'conventions'. The last index is the
 	// total number of files.
-	int matches[n_members_in_Conventions + 2];
+	int matches[n_members_in_conventions + 2];
 	memset(matches, 0, sizeof(matches));
 
 	analyze(arg_target_dirname, matches, regexes, recursive_flag);
 
 	// Free all allocated sections.
 	free(arg_target_dirname);
-	for (int i = 0; i < n_members_in_Conventions; i++) {	
+	for (int i = 0; i < n_members_in_conventions; i++) {	
 		regfree(&regexes[i]);
 	}
 	
@@ -207,10 +207,10 @@ int subc_exec_analyze (int argc, char *argv[])
 	const int total_padding = 20;
 	const int number_padding = 7;
 
-	const int total_files = matches[n_members_in_Conventions];
-	int other_files = matches[n_members_in_Conventions + 1];
-	for (int i = 0; i < n_members_in_Conventions; i++) {	
-		const char *convention_name = Conventions[i].name;
+	const int total_files = matches[n_members_in_conventions];
+	int other_files = matches[n_members_in_conventions + 1];
+	for (int i = 0; i < n_members_in_conventions; i++) {	
+		const char *convention_name = conventions[i].name;
 		const int convention_matches = matches[i];
 
 		printf("%-*s %*d\n", total_padding, convention_name, number_padding, convention_matches);
